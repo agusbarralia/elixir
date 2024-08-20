@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ElixirApplication<elixir>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.elixir.elixir.ElixirApplication",
+            "projectName": "elixir",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
