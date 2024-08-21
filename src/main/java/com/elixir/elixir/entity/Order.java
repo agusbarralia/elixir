@@ -1,5 +1,6 @@
 package com.elixir.elixir.entity;
 
+import java.util.List;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +40,10 @@ public class Order {
   @ManyToOne
   @JoinColumn(name = "orderstate_id", referencedColumnName = "orderstate_id")
   private OrderState orderState;
+
+  @OneToMany(mappedBy = "order")
+  private List<ProductsOrder> productOrders;
+
 
 
 }
