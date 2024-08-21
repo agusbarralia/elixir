@@ -2,7 +2,6 @@ package com.elixir.elixir.entity;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,15 +15,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class Label {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long category_id;
+    private Long label_id;
 
-    @Column
-    private String category_name;
+    private String label_name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "label")
     private List<Product> products;
 }
