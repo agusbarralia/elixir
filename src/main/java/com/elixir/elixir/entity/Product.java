@@ -1,5 +1,8 @@
 package com.elixir.elixir.entity;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +23,25 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long product_id;
 
     @Column
-    private String description;
+    private String product_name;
+
+    @Column
+    private String product_description;
+
+    @Column
+    private Double price;
+
+    @Column
+    private int stock;
+
+    @Column
+    private LocalDateTime date_published;
+
+    @Column
+    private boolean state;
 
     @ManyToOne
     @JoinColumn(name = "label_id", referencedColumnName = "label_id")
@@ -35,4 +54,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductsCart> productsCarts;
 }
