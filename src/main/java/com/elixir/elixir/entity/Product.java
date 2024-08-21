@@ -23,12 +23,16 @@ public class Product {
 
     @Column
     private String description;
- 
-    @Column
-    private String label;
+
+    @ManyToOne
+    @JoinColumn(name = "label_id", referencedColumnName = "label_id")
+    private Label label;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id")
     private SubCategory subCategory;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
+    private Category category;
 }

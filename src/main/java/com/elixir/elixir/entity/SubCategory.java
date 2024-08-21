@@ -7,15 +7,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class SubCategory {
     
     public SubCategory(String description) {
@@ -28,10 +28,6 @@ public class SubCategory {
 
     @Column
     private String description;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
-    private Category category;
 
     @OneToMany(mappedBy = "subCategory")
     private List<Product> products;
