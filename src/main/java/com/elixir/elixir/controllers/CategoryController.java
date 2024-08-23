@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 
 import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.exceptions.CategoryDuplicateException;
+import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.service.CategoryService;
 
 import java.net.URI;
@@ -26,7 +27,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
     
-    @GetMapping
+    @GetMapping("/get/categories")
     public ResponseEntity<Page<Category>> getCategories (
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
@@ -35,7 +36,13 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(page, size)));
     }
 
-    @PostMapping("/{category_name}")
+    @GetMapping("/get/{category_name}")
+    public ResponseEntity<Category> getCategoryByCategory_name(@PathVariable String category_name)
+        throws CategoryNoSuchElementException{
+            return ResponseEntity.ok(categoryService.getCategoryByCategory_name(category_name).get());
+    }
+    
+    @PostMapping("/post/{category_name}")
     public ResponseEntity<Object> createCategory(@PathVariable String category_name)
         throws CategoryDuplicateException{
             Category result = categoryService.createCategory(category_name);
