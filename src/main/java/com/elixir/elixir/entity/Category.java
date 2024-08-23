@@ -18,6 +18,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Category {
 
+    public Category(String category_name) {
+    this.category_name = category_name;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long category_id;
@@ -27,4 +31,5 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;
+
 }
