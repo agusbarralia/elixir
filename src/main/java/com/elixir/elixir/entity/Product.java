@@ -26,7 +26,7 @@ public class Product {
     private Long product_id;
 
     @Column
-    private String product_name;
+    private String name;
 
     @Column
     private String product_description;

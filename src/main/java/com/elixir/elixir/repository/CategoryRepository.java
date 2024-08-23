@@ -11,7 +11,7 @@ import com.elixir.elixir.entity.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>{
 
-    @Query(value = "SELECT c FROM Category c WHERE c.category_name = ?1")
-    Optional<Category> findByCategory_name(String category_name);
+    @Query(value = "SELECT c FROM Category c WHERE c.name = ?1")
+    Optional<Category> findByCategoryName(String name);
 
 }

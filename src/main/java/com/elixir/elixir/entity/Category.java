@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Category {
 
-    public Category(String category_name) {
-    this.category_name = category_name;
+    public Category(String name) {
+    this.name = name;
     }
 
     @Id
@@ -27,7 +27,7 @@ public class Category {
     private Long category_id;
 
     @Column
-    private String category_name;
+    private String name;
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;

@@ -23,7 +23,7 @@ public class SubCategory {
     private Long subcategory_id;
 
     @Column
-    private String subcategory_name;
+    private String name;
 
     @OneToMany(mappedBy = "subCategory")
     private List<Product> products;

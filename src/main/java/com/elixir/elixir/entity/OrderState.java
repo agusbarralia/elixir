@@ -23,7 +23,7 @@ public class OrderState {
     private Long orderstate_id;
 
     @Column
-    private String orderstate_name;
+    private String name;
 
     @OneToMany(mappedBy = "orderState")
     private List<Order> orders;

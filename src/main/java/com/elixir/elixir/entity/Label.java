@@ -21,7 +21,7 @@ public class Label {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long label_id;
 
-    private String label_name;
+    private String name;
 
     @OneToMany(mappedBy = "label")
     private List<Product> products;
