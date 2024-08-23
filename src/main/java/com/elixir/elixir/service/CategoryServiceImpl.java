@@ -21,14 +21,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll(pageable);
     }
 
-    /* 
-    public Optional<Category> getCategoryByCategory_name(String category_name){
-        Optional<Category> categories = categoryRepository.findByCategory_name(category_name);
-        if (categories.isEmpty())
-            return Optional.empty();
-        return categoryRepository.findByCategory_name(category_name);
-    }
-    */
     public Optional<Category> getCategoryByCategory_name(String category_name) throws CategoryNoSuchElementException {
         Optional<Category> category = categoryRepository.findByCategory_name(category_name);
         if (category.isPresent()) {
