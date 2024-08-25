@@ -1,13 +1,11 @@
 package com.elixir.elixir.entity;
 
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +25,7 @@ public class Cart {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cart")
-    private List<ProductsCart> ProductsCart;
+    
+    //@OneToMany(mappedBy = "cart")
+    //private List<ProductsCart> productsCart;
 }

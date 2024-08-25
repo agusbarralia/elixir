@@ -1,6 +1,8 @@
 package com.elixir.elixir.entity;
 
 import java.util.List;
+
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -26,7 +28,6 @@ public class Order {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long order_id;
-  
   @Column
   private LocalDateTime order_date;
   
