@@ -29,7 +29,7 @@ public class Category {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    //@OneToMany(mappedBy = "category")
+    //private List<Product> products;
 
 }
