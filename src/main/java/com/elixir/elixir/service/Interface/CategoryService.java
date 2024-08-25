@@ -1,4 +1,4 @@
-package com.elixir.elixir.service;
+package com.elixir.elixir.service.Interface;
 
 import java.util.List;
 import com.elixir.elixir.exceptions.CategoryDuplicateException;

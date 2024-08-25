@@ -10,6 +10,7 @@ import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.SubCategoryDuplicateException;
 import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
 import com.elixir.elixir.repository.SubCategoryRepository;
+import com.elixir.elixir.service.Interface.SubCategoryService;
 
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService{

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.exceptions.CategoryDuplicateException;
 import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
-import com.elixir.elixir.service.CategoryService;
+import com.elixir.elixir.service.Interface.CategoryService;
 
 import java.net.URI;
 import java.util.List;

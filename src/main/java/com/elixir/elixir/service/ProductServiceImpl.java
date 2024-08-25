@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.repository.ProductRepository;
+import com.elixir.elixir.service.Interface.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {

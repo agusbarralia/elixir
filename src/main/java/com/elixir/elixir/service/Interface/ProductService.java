@@ -1,4 +1,4 @@
-package com.elixir.elixir.service;
+package com.elixir.elixir.service.Interface;
 
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;

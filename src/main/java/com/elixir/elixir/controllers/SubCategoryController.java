@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.SubCategoryDuplicateException;
 import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
-import com.elixir.elixir.service.SubCategoryService;
+import com.elixir.elixir.service.Interface.SubCategoryService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

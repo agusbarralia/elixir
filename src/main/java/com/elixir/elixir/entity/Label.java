@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Label {
 
+    public Label(String name) {
+        this.name = name;
+        }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long label_id;

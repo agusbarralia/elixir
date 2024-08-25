@@ -9,6 +9,7 @@ import com.elixir.elixir.exceptions.CategoryDuplicateException;
 import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.repository.CategoryRepository;
+import com.elixir.elixir.service.Interface.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
