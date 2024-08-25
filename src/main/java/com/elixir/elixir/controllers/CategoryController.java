@@ -10,12 +10,11 @@ import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.service.CategoryService;
 
 import java.net.URI;
-import java.util.List; // Add this line
+import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("categories")

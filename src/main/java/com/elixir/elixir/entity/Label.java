@@ -25,5 +25,4 @@ public class Label {
 
     //@OneToMany(mappedBy = "label")
     //private List<Product> products;
-
 }
