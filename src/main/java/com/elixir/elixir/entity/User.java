@@ -1,7 +1,6 @@
 package com.elixir.elixir.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,11 +48,13 @@ public class User {
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
 
+
+    /* 
     @OneToOne(mappedBy = "user")
     private Cart cart;
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
-
+    */
 }
 
