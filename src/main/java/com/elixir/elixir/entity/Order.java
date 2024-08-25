@@ -1,8 +1,6 @@
 package com.elixir.elixir.entity;
 
 import java.util.List;
-
-
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
