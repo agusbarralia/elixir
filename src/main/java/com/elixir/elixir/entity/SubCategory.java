@@ -20,7 +20,7 @@ public class SubCategory {
 
     public SubCategory(String name) {
         this.name = name;
-        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

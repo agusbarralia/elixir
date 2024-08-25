@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elixir.elixir.entity.Product;
+import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.service.Interface.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    
+
     @Autowired
     private ProductRepository productRepository;
 
@@ -22,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll();
 
     }
+
     @Override
     public Optional<Product> getProductByName(String name) throws ProductNoSuchElementException {
         Optional<Product> product = productRepository.findByName(name);
@@ -31,22 +33,21 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNoSuchElementException();
         }
     }
-    
+
     @Override
     public void deleteProduct(String id) {
         return;
     }
-    
-    @Override
-    public Product createProduct(String name, String description, String category, String price, String quantity, String image) {
-        return null;
 
+    @Override
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
     }
-    
+
     @Override
     public Product updateProduct(String product_name, String product_description, String product_image,
-            String product_price, String product_category, String product_label) throws ProductNoSuchElementException {
+            String product_price, String product_category, String product_label){
         throw new UnsupportedOperationException("Unimplemented method 'updateProduct'");
-    
+
     }
 }

@@ -12,7 +12,7 @@ public interface ProductService {
 
     public Optional<Product> getProductByName(String product_name) throws ProductNoSuchElementException;
 
-    public Product createProduct(String product_name, String product_description, String product_image, String product_price, String product_category, String product_label) throws ProductNoSuchElementException;
+    public Product createProduct(Product product);
 
     public Product updateProduct(String product_name, String product_description, String product_image, String product_price, String product_category, String product_label) throws ProductNoSuchElementException;
 
