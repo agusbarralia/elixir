@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elixir.elixir.entity.Product;
-import com.elixir.elixir.entity.SubCategory;
+//import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.service.Interface.ProductService;

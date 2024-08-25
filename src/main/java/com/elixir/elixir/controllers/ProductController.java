@@ -1,11 +1,11 @@
 package com.elixir.elixir.controllers;
 
 import com.elixir.elixir.entity.Product;
-import com.elixir.elixir.entity.SubCategory;
+//import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.service.Interface.ProductService;
 
-import java.net.URI;
+//import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,6 @@ public class ProductController {
     @PostMapping("/create")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) throws ProductNoSuchElementException{
         Product result = productService.createProduct(product);
-        System.out.println(result.getName());
         return ResponseEntity.ok(productService.getProductByName(result.getName()).get());
     }
     
