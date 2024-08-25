@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Optional<Category> getCategoryByName(String category_name) throws CategoryNoSuchElementException {
-        Optional<Category> category = categoryRepository.findByCategoryName(category_name);
+        Optional<Category> category = categoryRepository.findByName(category_name);
         if (category.isPresent()) {
             return category;
         } else {
@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Category createCategory(String category_name) throws CategoryDuplicateException{
-        Optional<Category> categories = categoryRepository.findByCategoryName(category_name);
+        Optional<Category> categories = categoryRepository.findByName(category_name);
         if(categories.isEmpty())
             return categoryRepository.save(new Category(category_name));
         throw new CategoryDuplicateException();

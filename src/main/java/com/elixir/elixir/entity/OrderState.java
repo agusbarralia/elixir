@@ -27,5 +27,4 @@ public class OrderState {
 
     @OneToMany(mappedBy = "orderState")
     private List<Order> orders;
-
 }

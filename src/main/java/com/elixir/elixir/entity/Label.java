@@ -23,6 +23,6 @@ public class Label {
 
     private String name;
 
-    @OneToMany(mappedBy = "label")
-    private List<Product> products;
+    //@OneToMany(mappedBy = "label")
+    //private List<Product> products;
 }

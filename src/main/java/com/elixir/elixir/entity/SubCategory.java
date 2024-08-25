@@ -25,6 +25,6 @@ public class SubCategory {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "subCategory")
-    private List<Product> products;
+    //@OneToMany(mappedBy = "subCategory")
+    //private List<Product> products;
 }

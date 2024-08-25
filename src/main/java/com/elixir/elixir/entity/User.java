@@ -56,6 +56,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
-
 }
 
