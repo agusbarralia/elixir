@@ -50,17 +50,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Long product_id, Product newProduct) throws ProductNoSuchElementException {
-    Optional<Product> oldProduct = productRepository.findById(product_id);
+        //que exista el producto?
+        Optional<Product> oldProduct = productRepository.findById(product_id);
         if (oldProduct.isPresent()) {
-            Product productToUpdate = oldProduct.get();
-            productToUpdate.setName(newProduct.getName());
-            productToUpdate.setPrice(newProduct.getPrice());
-            productToUpdate.setProduct_description(newProduct.getProduct_description());
-            productToUpdate.setStock(newProduct.getStock());productToUpdate.setSubCategory(newProduct.getSubCategory());
-            productToUpdate.setCategory(newProduct.getCategory());
-            productToUpdate.setLabel(newProduct.getLabel());
-            productRepository.save(productToUpdate);
-            return productToUpdate;
+            productRepository.save(newProduct);
+            return newProduct;
         } else {
             throw new ProductNoSuchElementException();
         }
@@ -68,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
+        //Ver para agregar alguna validacion (nombre diferente?)
         return productRepository.save(product);
     }
 }

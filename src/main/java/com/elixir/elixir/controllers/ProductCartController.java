@@ -37,8 +37,5 @@ public class ProductCartController {
         return ResponseEntity.ok(productCartService.getProductCartByCartId(result.getCart().getCart_id()));
 
     }
-
-
-
     
 }

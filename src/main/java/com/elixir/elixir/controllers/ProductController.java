@@ -32,8 +32,8 @@ public class ProductController {
         return productService.getProducts();
     }
     
-    @GetMapping("/{product_name}")
-    public ResponseEntity<Product> getProductByName(@PathVariable String product_name)
+    @GetMapping("/name")
+    public ResponseEntity<Product> getProductByName(@RequestParam String product_name)
         throws ProductNoSuchElementException {
             return ResponseEntity.ok(productService.getProductByName(product_name).get());
     }
@@ -43,15 +43,18 @@ public class ProductController {
         Product result = productService.createProduct(product);
         return ResponseEntity.ok(productService.getProductByName(result.getName()).get());
     }
-    
+
+    //VER QUE ONDA EL TIPO DE PETICION HTTP ?PUT?
     @PostMapping("/update")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product) throws ProductNoSuchElementException{
-        Product result = productService.createProduct(product);
+        Product result = productService.updateProduct(product.getProduct_id(),product);
         return ResponseEntity.ok(productService.getProductByName(result.getName()).get());
     }
    
     //Se podria cambiar la URI, a delete o algo asi (cambia el state de la entidad del product)
-    @GetMapping("/changestate/{product_id}")
+
+    //VER QUE ONDA EL TIPO DE PETICION HTTP ?DELETE?
+    @PostMapping("/changestate/{product_id}")
     public ResponseEntity<Product> changeState(@PathVariable Long product_id) throws ProductNoSuchElementException{
     return ResponseEntity.ok(productService.changeState(product_id));    
     }
