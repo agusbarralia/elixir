@@ -16,17 +16,19 @@ public class ProductCartServiceImpl implements ProductCartService {
     @Autowired
     private ProductCartRepository productCartRepository;
 
+    // Obtener todos los detalles de los productos de un carrito
     public List<ProductsCart> getProductCartByCartId(Long cart_id){
-
         return productCartRepository.findByCartId(cart_id);
 
 
     }
 
-
     public ProductsCart addtoCart(ProductsCart productsCart){
-
         return productCartRepository.save(productsCart);
+    }
+
+    public void deletefromCart(Long cart_id, Long product_id){
+        productCartRepository.deleteByCartIdAndProductId(cart_id, product_id);
     }
 
 }

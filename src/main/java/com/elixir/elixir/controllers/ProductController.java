@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -42,7 +44,16 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByName(result.getName()).get());
     }
     
-
+    @PostMapping("/update")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product) throws ProductNoSuchElementException{
+        Product result = productService.createProduct(product);
+        return ResponseEntity.ok(productService.getProductByName(result.getName()).get());
+    }
    
-
+    //Se podria cambiar la URI, a delete o algo asi (cambia el state de la entidad del product)
+    @GetMapping("/changestate/{product_id}")
+    public ResponseEntity<Product> changeState(@PathVariable Long product_id) throws ProductNoSuchElementException{
+    return ResponseEntity.ok(productService.changeState(product_id));    
+    }
+    
 }

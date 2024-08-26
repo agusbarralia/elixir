@@ -61,4 +61,12 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductsOrder> productOrders;
 */
+
+    public boolean getState() {
+        return state;
+    }
+
+    public void setState(boolean newState) {
+        this.state = newState;
+    }
 }

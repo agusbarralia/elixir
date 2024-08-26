@@ -10,4 +10,5 @@ public interface ProductCartService {
     
     public ProductsCart addtoCart(ProductsCart productsCart);
     
+    public void deletefromCart(Long cart_id, Long product_id);
 }

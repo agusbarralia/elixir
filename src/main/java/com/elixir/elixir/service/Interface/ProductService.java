@@ -1,5 +1,7 @@
 package com.elixir.elixir.service.Interface;
 
+import com.elixir.elixir.entity.Category;
+import com.elixir.elixir.entity.Label;
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 
@@ -12,10 +14,10 @@ public interface ProductService {
 
     public Optional<Product> getProductByName(String product_name) throws ProductNoSuchElementException;
 
+    public Product changeState(Long product_id) throws ProductNoSuchElementException;
+
+    public Product updateProduct(Long product_id, Product newProduct) throws ProductNoSuchElementException;
+
     public Product createProduct(Product product);
-
-    public Product updateProduct(String product_name, String product_description, String product_image, String product_price, String product_category, String product_label) throws ProductNoSuchElementException;
-
-    public void deleteProduct(String product_name) throws ProductNoSuchElementException;
-
+    
 }

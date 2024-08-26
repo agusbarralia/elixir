@@ -35,19 +35,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(String id) {
-        return;
+    public Product changeState(Long product_id) throws ProductNoSuchElementException{
+        Optional<Product> product = productRepository.findById(product_id);
+        if (product.isPresent()) {
+            Product productToChange = product.get();
+            productToChange.setState(!productToChange.getState());
+            productRepository.save(productToChange);
+            return productToChange;
+        }
+        else {
+            throw new ProductNoSuchElementException();
+        }        
+    }
+
+    @Override
+    public Product updateProduct(Long product_id, Product newProduct) throws ProductNoSuchElementException {
+    Optional<Product> oldProduct = productRepository.findById(product_id);
+        if (oldProduct.isPresent()) {
+            Product productToUpdate = oldProduct.get();
+            productToUpdate.setName(newProduct.getName());
+            productToUpdate.setPrice(newProduct.getPrice());
+            productToUpdate.setProduct_description(newProduct.getProduct_description());
+            productToUpdate.setStock(newProduct.getStock());productToUpdate.setSubCategory(newProduct.getSubCategory());
+            productToUpdate.setCategory(newProduct.getCategory());
+            productToUpdate.setLabel(newProduct.getLabel());
+            productRepository.save(productToUpdate);
+            return productToUpdate;
+        } else {
+            throw new ProductNoSuchElementException();
+        }
     }
 
     @Override
     public Product createProduct(Product product) {
         return productRepository.save(product);
-    }
-
-    @Override
-    public Product updateProduct(String product_name, String product_description, String product_image,
-            String product_price, String product_category, String product_label){
-        throw new UnsupportedOperationException("Unimplemented method 'updateProduct'");
-
     }
 }
