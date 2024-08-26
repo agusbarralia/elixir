@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("productcart")
+@RequestMapping("productscart")
 public class ProductCartController {
     
     @Autowired
@@ -35,7 +35,11 @@ public class ProductCartController {
     public ResponseEntity<List<ProductsCart>> addtoCart(@RequestBody ProductsCart productsCart){
         ProductsCart result = productCartService.addtoCart(productsCart);
         return ResponseEntity.ok(productCartService.getProductCartByCartId(result.getCart().getCart_id()));
-
     }
     
+    @PostMapping("/removeproduct/{productscart_id}")
+    public ResponseEntity<Boolean> removeProduct(@PathVariable Long productscart_id){
+        productCartService.removeProduct(productscart_id);
+        return ResponseEntity.ok(true);//??????????????????????????????????????
+    }
 }

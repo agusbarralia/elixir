@@ -1,7 +1,6 @@
 package com.elixir.elixir.service.Interface;
 
-import com.elixir.elixir.entity.Category;
-import com.elixir.elixir.entity.Label;
+
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 
