@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.elixir.elixir.service.Interface.ProductCartService;
-import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductsCart;
-import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

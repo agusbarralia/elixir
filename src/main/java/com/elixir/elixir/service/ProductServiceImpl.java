@@ -24,6 +24,15 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    public Optional<Product> getProductById(Long id) throws ProductNoSuchElementException {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            return product;
+        } else {
+            throw new ProductNoSuchElementException();
+        }
+    }
+
     @Override
     public Optional<Product> getProductByName(String name) throws ProductNoSuchElementException {
         Optional<Product> product = productRepository.findByName(name);

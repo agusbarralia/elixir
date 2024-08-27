@@ -10,6 +10,7 @@ import java.util.List;
 public interface ProductService {
 
     public List<Product> getProducts();
+    public Optional<Product> getProductById(Long id) throws ProductNoSuchElementException;
 
     public Optional<Product> getProductByName(String product_name) throws ProductNoSuchElementException;
 
