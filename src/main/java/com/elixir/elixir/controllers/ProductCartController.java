@@ -37,6 +37,13 @@ public class ProductCartController {
     @PostMapping("/removeproduct/{productscart_id}")
     public ResponseEntity<Boolean> removeProduct(@PathVariable Long productscart_id){
         productCartService.removeProduct(productscart_id);
-        return ResponseEntity.ok(true);//??????????????????????????????????????
+        return ResponseEntity.ok(true);
     }
+
+    @PostMapping("/removeallproducts/{cart_id}")
+    public ResponseEntity<Boolean> removeAllProducts(@PathVariable Long cart_id){
+        productCartService.removeAllProducts(cart_id);
+        return ResponseEntity.ok(true);
+    }
+
 }

@@ -28,4 +28,8 @@ public class ProductCartServiceImpl implements ProductCartService {
         productCartRepository.deleteById(productscart_id);
     }
 
+    public void removeAllProducts(Long cart_id){
+        productCartRepository.deleteByCartId(cart_id);
+    }
+
 }
