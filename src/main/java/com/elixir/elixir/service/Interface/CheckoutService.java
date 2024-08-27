@@ -1,7 +1,10 @@
 package com.elixir.elixir.service.Interface;
 
+import com.elixir.elixir.entity.Order;
+import com.elixir.elixir.entity.User;
+
 public interface CheckoutService {
     
-    public void checkout(Long cart_id);
+    public Order checkout(User user);
 
 }
