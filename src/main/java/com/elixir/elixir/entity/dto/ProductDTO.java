@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO {
-    
+
     private Long productId;
     private String name;
     private String productDescription;
@@ -20,6 +20,5 @@ public class ProductDTO {
     private Long labelId;
     private Long subCategoryId;
     private Long categoryId;
-
 
 }

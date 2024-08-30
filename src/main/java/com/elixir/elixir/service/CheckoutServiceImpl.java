@@ -3,14 +3,14 @@ package com.elixir.elixir.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
+//import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.Order;
-import com.elixir.elixir.entity.OrderState;
+//import com.elixir.elixir.entity.OrderState;
 import com.elixir.elixir.entity.ProductsOrder;
 import com.elixir.elixir.entity.User;
 import com.elixir.elixir.repository.CartRepository;

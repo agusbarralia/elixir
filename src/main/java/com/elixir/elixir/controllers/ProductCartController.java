@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.elixir.elixir.service.Interface.ProductCartService;
-import com.elixir.elixir.entity.ProductsCart;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+import com.elixir.elixir.entity.ProductsCart;
+import com.elixir.elixir.entity.dto.ProductsCartDTO;
+import com.elixir.elixir.service.Interface.ProductCartService;
 
 @RestController
 @RequestMapping("productscart")
@@ -24,14 +23,14 @@ public class ProductCartController {
     private ProductCartService productCartService;
 
     @GetMapping("/{cart_id}")
-    public List<ProductsCart> getProductCartByCartId(@PathVariable Long cart_id) {
+    public List<ProductsCartDTO> getProductCartByCartId(@PathVariable Long cart_id) {
         return productCartService.getProductCartByCartId(cart_id);
     }
     
     @PostMapping("/addtocart")
-    public ResponseEntity<List<ProductsCart>> addtoCart(@RequestBody ProductsCart productsCart){
-        ProductsCart result = productCartService.addtoCart(productsCart);
-        return ResponseEntity.ok(productCartService.getProductCartByCartId(result.getCart().getCart_id()));
+    public ResponseEntity<List<ProductsCartDTO>> addtoCart(@RequestBody ProductsCart productsCart) {
+        ProductsCartDTO result = productCartService.addtoCart(productsCart);
+        return ResponseEntity.ok(productCartService.getProductCartByCartId(result.getCart_id()));
     }
     
     @PostMapping("/removeproduct/{productscart_id}")
@@ -45,5 +44,4 @@ public class ProductCartController {
         productCartService.removeAllProducts(cart_id);
         return ResponseEntity.ok(true);
     }
-
 }

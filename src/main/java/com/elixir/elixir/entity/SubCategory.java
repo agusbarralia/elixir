@@ -31,4 +31,5 @@ public class SubCategory {
 
     //@OneToMany(mappedBy = "subCategory")
     //private List<Product> products;
+    
 }

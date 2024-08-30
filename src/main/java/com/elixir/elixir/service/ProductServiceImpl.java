@@ -78,20 +78,21 @@ public class ProductServiceImpl implements ProductService {
         return convertToDTO(savedProduct);
     }
 
-
     private ProductDTO convertToDTO(Product product) {
-    ProductDTO productDTO = new ProductDTO();
-    productDTO.setProductId(product.getProduct_id());
-    productDTO.setName(product.getName());
-    productDTO.setProductDescription(product.getProduct_description());
-    productDTO.setPrice(product.getPrice());
-    productDTO.setStock(product.getStock());
-    productDTO.setDatePublished(product.getDate_published());
-    productDTO.setState(product.getState());
-    productDTO.setLabelId(product.getLabel() != null ? product.getLabel().getLabel_id() : null);
-    productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubcategory_id() : null);
-    productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductId(product.getProduct_id());
+        productDTO.setName(product.getName());
+        productDTO.setProductDescription(product.getProduct_description());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setStock(product.getStock());
+        productDTO.setDatePublished(product.getDate_published());
+        productDTO.setState(product.getState());
+        productDTO.setLabelId(product.getLabel() != null ? product.getLabel().getLabel_id() : null);
+        productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubcategory_id() : null);
+        productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
+        return productDTO;
+    }
 
-    return productDTO;
-}
+    
+
 }
