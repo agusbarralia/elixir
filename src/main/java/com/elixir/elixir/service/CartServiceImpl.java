@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import com.elixir.elixir.entity.Cart;
+import com.elixir.elixir.entity.dto.CartDTO;
 import com.elixir.elixir.entity.User;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
 import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.service.Interface.CartService;
+import com.elixir.elixir.service.Interface.ProductCartService;
 
 
 @Service
@@ -18,26 +20,39 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CartRepository cartRepository;
 
-    public Optional<Cart> getCartByUserId(Long userId) throws CartNoSuchElementException{
+    @Autowired
+    private ProductCartService productCartService;
+
+    public CartDTO getCartByUserId(Long userId) throws CartNoSuchElementException{
         Optional<Cart> cart = cartRepository.findByUserId(userId);
         if (cart.isPresent()) {
-            return cart;
+            return convertToDto(cart.get());
         } else {
             throw new CartNoSuchElementException();
         }
     }
 
-    public Cart createCart(Long userId) throws CartDuplicateException {
-
+    public CartDTO createCart(Long userId) throws CartDuplicateException {
         Optional<User> user = cartRepository.findUserById(userId);  //ESTO ESTA MAL DEBERIA DE HACERSE EN EL REPO DE USUARIO 
-        Optional<Cart> cart = cartRepository.findByUserId(userId);  //PERO NO EXISTE TODAVIA
+        Optional<Cart> cart = cartRepository.findByUserId(userId);  //PERO NO EXISTE TODAVIA XD
         if(cart.isEmpty() && user.isPresent()){                    
             Cart newCart = new Cart();
             newCart.setUser(user.get());
-            return cartRepository.save(newCart);
+            cartRepository.save(newCart);
+            return convertToDto(newCart);
         }
         throw new CartDuplicateException();
     }
 
+    public CartDTO convertToDto(Cart cart) {
+        if (cart == null) {
+            return null;
+        }
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setCartId(cart.getCart_id());
+        cartDTO.setUserId(cart.getUser().getUser_id()); 
+        cartDTO.setProductsCart( productCartService.convertAllToDTO(cart.getProductsCart()));
 
+        return cartDTO;
+    }
 }
