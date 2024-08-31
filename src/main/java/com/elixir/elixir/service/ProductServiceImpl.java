@@ -74,6 +74,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO createProduct(Product product) {
+        // Verificar si ya existe un producto con el mismo nombre
+        Optional<Product> existingProduct = productRepository.findByName(product.getName());
+        
+        if (existingProduct.isPresent()) {
+            throw new IllegalStateException("Ya existe un producto con el nombre " + product.getName());
+        }
+        
         Product savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
     }

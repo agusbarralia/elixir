@@ -2,6 +2,7 @@ package com.elixir.elixir.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 //import java.util.Optional;
 
@@ -39,11 +40,30 @@ public class CheckoutServiceImpl implements CheckoutService {
     private ProductCartRepository productCartRepository;
 
     public Order checkout(User user) {
+
         //VALIDAR QUE EL CARRITO NO ESTÉ VACÍO
         //PREGUNTAR SI HAY STOCK
-        Cart cart = cartRepository.findByUserId(user.getUser_id()).get();
+        Cart cart = cartRepository.findByUserId(user.getUser_id())
+                    .orElseThrow(() -> new IllegalStateException("Carrito no encontrado para el usuario"));
+
+        if (cart.getProducts().isEmpty()) {
+            throw new IllegalStateException("El carrito está vacío");
+        }
+        
+
+        //Esto se puede hacer desde una funcion/metodo aparte que se llame desde aca
+        cart.getProducts().forEach(productsCart -> {
+            int availableStock = productsCart.getProduct().getStock();
+            int requestedQuantity = productsCart.getQuantity();
+
+            if (requestedQuantity > availableStock) {
+                throw new IllegalStateException("Stock insuficiente para el producto: " + productsCart.getProduct().getName());
+            }
+        });
+
         Order order = new Order();
         order.setUser(user);
+        
         order.setOrderState(orderStateRepository.findByName("Pending").get()); // Asigna el estado "Pendiente" u otro estado inicial
         order.setOrder_date(LocalDateTime.now());
 
@@ -63,11 +83,17 @@ public class CheckoutServiceImpl implements CheckoutService {
         productsOrderRepository.saveAll(productsOrderList);
 
         // Descontar stock
+        cart.getProducts().forEach(productsCart -> {
+            int remainingStock = productsCart.getProduct().getStock() - productsCart.getQuantity();
+            productsCart.getProduct().setStock(remainingStock); // Actualiza el stock del producto
+        });
+        
         // Limpia el carrito después del checkout
         productCartRepository.deleteByCartId(cart.getCart_id());
 
         return order;
     }
+
 
     public Float getTotal(List<ProductsOrder> productsOrderList) {
         return (float) productsOrderList.stream().mapToDouble(ProductsOrder::getSubtotal).sum();
