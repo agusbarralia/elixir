@@ -44,14 +44,14 @@ public class ProductController {
             return ResponseEntity.ok(productService.getProductByName(product_name));
     }
 
-    @PostMapping("/create")
+    @PostMapping("admin/create")
     public ResponseEntity<ProductDTO> createProduct(@RequestBody Product product) throws ProductNoSuchElementException{
         ProductDTO result = productService.createProduct(product);
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
     }
 
     //VER QUE ONDA EL TIPO DE PETICION HTTP ?PUT?
-    @PostMapping("/update")
+    @PostMapping("admin/update")
     public ResponseEntity<ProductDTO> updateProduct(@RequestBody Product product) throws ProductNoSuchElementException{
         ProductDTO result = productService.updateProduct(product.getProduct_id(),product);
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
@@ -60,7 +60,7 @@ public class ProductController {
     //Se podria cambiar la URI, a delete o algo asi (cambia el state de la entidad del product)
 
     //VER QUE ONDA EL TIPO DE PETICION HTTP ?DELETE?
-    @PostMapping("/changestate/{product_id}")
+    @PostMapping("admin/changestate/{product_id}")
     public ResponseEntity<ProductDTO> changeState(@PathVariable Long product_id) throws ProductNoSuchElementException{
     return ResponseEntity.ok(productService.changeState(product_id));    
     }

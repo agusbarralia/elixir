@@ -1,28 +1,37 @@
 package com.elixir.elixir.entity;
 
+import java.util.Collection;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+//import jakarta.persistence.JoinColumn;
+//import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-    
+public class User implements UserDetails{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
@@ -48,9 +57,39 @@ public class User {
     @Column
     private Boolean state;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 
     @OneToOne(mappedBy = "user")
     private Cart cart;

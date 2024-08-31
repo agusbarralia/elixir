@@ -1,7 +1,7 @@
 package com.elixir.elixir.service.Interface;
 
-import java.util.Optional;
-import com.elixir.elixir.entity.Cart;
+//import java.util.Optional;
+//import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.dto.CartDTO;
 
 import com.elixir.elixir.exceptions.CartDuplicateException;
