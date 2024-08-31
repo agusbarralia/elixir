@@ -1,5 +1,7 @@
 package com.elixir.elixir.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +33,9 @@ public class AuthenticationService {
                             .last_name(request.getLastname())
                             .email(request.getEmail())
                             .password(passwordEncoder.encode(request.getPassword()))
+                            .username(request.getEmail())
+                            .state(true)
+                            .creation_date(LocalDateTime.now())
                             .role(request.getRole())
                             .build();
 
