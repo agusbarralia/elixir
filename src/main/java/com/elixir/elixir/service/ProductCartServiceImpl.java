@@ -3,6 +3,7 @@ package com.elixir.elixir.service;
 import java.util.List;
 import java.util.Collections;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,22 @@ public class ProductCartServiceImpl implements ProductCartService {
 
     @Override
     public ProductsCartDTO addtoCart(ProductsCart productsCart) {
-        ProductsCart savedProductCart = productCartRepository.save(productsCart);
-        return convertToDTO(savedProductCart);
+        Optional<ProductsCart> existingProductCart = productCartRepository
+        .findByCartAndProduct(productsCart.getCart(), productsCart.getProduct());
+        
+        if (existingProductCart.isPresent()) {
+            // Si ya existe, sumarle la cantidad
+            ProductsCart productInCart = existingProductCart.get();
+            productInCart.setQuantity(productInCart.getQuantity() + productsCart.getQuantity());
+            productInCart.setSubtotal(productInCart.getSubtotal() + productsCart.getSubtotal());
+            ProductsCart updatedProductCart = productCartRepository.save(productInCart);
+            return convertToDTO(updatedProductCart);
+        } else {
+            // Si no existe, agregarlo como nuevo
+            ProductsCart savedProductCart = productCartRepository.save(productsCart);
+            return convertToDTO(savedProductCart);
+        }
+
     }
 
     @Override

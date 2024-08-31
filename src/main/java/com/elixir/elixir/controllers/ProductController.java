@@ -32,6 +32,7 @@ public class ProductController {
     public List<ProductDTO> GetProducts() {
         return productService.getProducts();
     }
+    
     @GetMapping("/id")
     public ResponseEntity<ProductDTO> getProductById(@RequestParam Long id)
         throws ProductNoSuchElementException {
