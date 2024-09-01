@@ -36,7 +36,7 @@ public class SubCategoryController {
             return ResponseEntity.ok(subcategoryService.getSubCategoryByName(subcategory_name).get());
     }
     
-    @PostMapping("/{subcategory_name}")
+    @PostMapping("/admin/{subcategory_name}")
     public ResponseEntity<SubCategory> createSubCategory(@PathVariable String subcategory_name)
         throws SubCategoryDuplicateException{
             SubCategory result = subcategoryService.createSubCategory(subcategory_name);

@@ -37,7 +37,7 @@ public class LabelController {
             return ResponseEntity.ok(labelService.getLabelByName(label_name).get());
     }
     
-    @PostMapping("/{label_name}")
+    @PostMapping("/admin/{label_name}")
     public ResponseEntity<Label> createLabel(@PathVariable String label_name)
         throws LabelDuplicateException{
             Label result = labelService.createLabel(label_name);

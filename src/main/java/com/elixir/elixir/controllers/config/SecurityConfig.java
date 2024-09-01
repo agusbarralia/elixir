@@ -31,8 +31,24 @@ public class SecurityConfig {
                             .csrf(AbstractHttpConfigurer::disable)
                             .authorizeHttpRequests(req -> req.requestMatchers("/api/v1/auth/**").permitAll()
                                             .requestMatchers("/error/**").permitAll()
-                                            .requestMatchers("/categories/**").hasAnyAuthority(Role.USER.name())
+
+                                            .requestMatchers("/categories/**").permitAll()
+                                            .requestMatchers("/categories/admin/**").hasAnyAuthority(Role.ADMIN.name())
+
+                                            .requestMatchers("/subcategories/**").permitAll()
+                                            .requestMatchers("/subcategories/admin/**").hasAnyAuthority(Role.ADMIN.name())
+
+                                            .requestMatchers("/label/**").permitAll()
+                                            .requestMatchers("/label/admin/**").hasAnyAuthority(Role.ADMIN.name())
+
+                                            .requestMatchers("/products/**").permitAll()
                                             .requestMatchers("/products/admin/**").hasAnyAuthority(Role.ADMIN.name())
+                                            
+                                            .requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
+
+                                            .requestMatchers("/productscart/**").hasAnyAuthority(Role.USER.name())
+
+                                            .requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
                                             .anyRequest()
                                             .authenticated())
                             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
