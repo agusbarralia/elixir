@@ -50,7 +50,6 @@ public class SecurityConfig {
 
                                             .requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
 
-                                            .requestMatchers("/order/**").hasAnyAuthority(Role.USER.name())
                                             .requestMatchers("/order/admin/**").hasAnyAuthority(Role.ADMIN.name())
 
                                             .anyRequest()

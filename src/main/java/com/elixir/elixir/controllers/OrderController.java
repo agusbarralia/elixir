@@ -21,8 +21,7 @@ public class OrderController {
     @Autowired
     private OrderServiceImpl orderService;
     
-    //CORREGIR
-    @GetMapping("/admin/orders")
+    @GetMapping("/admin")
     public List<OrderDTO> getOrders() {
         return orderService.getOrders();
     }
