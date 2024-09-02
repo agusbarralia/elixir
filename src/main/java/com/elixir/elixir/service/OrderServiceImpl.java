@@ -23,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
     //CORREGIR
     @Override
     public List<OrderDTO> getOrders() {
-        return orderRepository.findAll().stream()
+        return orderRepository.findAllByUser().stream()
                 .map(this::convertToOrderDTO)
                 .collect(Collectors.toList());
     }
@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
     //CORREGIR
     @Override
     public List<OrderDTO> getOrdersByUserId(Long user_id) {
-        return orderRepository.findById(user_id).stream()
+        return orderRepository.findByUser_id(user_id).stream()
                 .map(this::convertToOrderDTO)
                 .collect(Collectors.toList());
     }

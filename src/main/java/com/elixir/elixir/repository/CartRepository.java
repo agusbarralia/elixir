@@ -12,6 +12,7 @@ import com.elixir.elixir.entity.User;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
+    
     @Query("SELECT c FROM Cart c WHERE c.user.user_id = ?1")
     Optional<Cart> findByUserId(Long user_id);
 

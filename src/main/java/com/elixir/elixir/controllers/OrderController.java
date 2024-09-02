@@ -22,12 +22,11 @@ public class OrderController {
     private OrderServiceImpl orderService;
     
     //CORREGIR
-    @GetMapping("/admin")
+    @GetMapping("/admin/orders")
     public List<OrderDTO> getOrders() {
         return orderService.getOrders();
     }
 
-    //CORREGIR
     @GetMapping("/user_id")
     public List<OrderDTO> getOrdersByUserId(@RequestParam Long user_id) {
         return orderService.getOrdersByUserId(user_id);
