@@ -11,6 +11,7 @@ import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.Order;
 import com.elixir.elixir.entity.ProductsOrder;
 import com.elixir.elixir.entity.User;
+import com.elixir.elixir.entity.dto.OrderDTO;
 import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.repository.OrderRepository;
 import com.elixir.elixir.repository.OrderStateRepository;
@@ -36,7 +37,10 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Autowired
     private ProductCartRepository productCartRepository;
 
-    public Order checkout(User user) {
+    @Autowired
+    private OrderServiceImpl orderService;
+
+    public OrderDTO checkout(User user) throws IllegalStateException {
 
         //VALIDAR QUE EL CARRITO NO ESTÉ VACÍO
         //PREGUNTAR SI HAY STOCK
@@ -88,7 +92,8 @@ public class CheckoutServiceImpl implements CheckoutService {
         // Limpia el carrito después del checkout
         productCartRepository.deleteByCartId(cart.getCart_id());
 
-        return order;
+        return orderService.convertToOrderDTO(order);
+        
     }
 
 
