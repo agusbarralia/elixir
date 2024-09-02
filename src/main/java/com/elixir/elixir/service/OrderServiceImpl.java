@@ -20,6 +20,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private ProductServiceImpl productService;
+
     //CORREGIR
     @Override
     public List<OrderDTO> getOrders() {
@@ -60,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
                     productsOrderDTO.setUnit_price(productsOrder.getUnit_price());
                     productsOrderDTO.setSubtotal(productsOrder.getSubtotal());
                     productsOrderDTO.setOrderId(productsOrder.getOrder().getOrder_id());
+                    productsOrderDTO.setProductDTO(productService.convertToDTO(productsOrder.getProduct()));
                     return productsOrderDTO;
                 }).collect(Collectors.toList()));
         orderDTO.setTotal(order.getTotal());
