@@ -1,10 +1,15 @@
 package com.elixir.elixir.service.Interface;
 
-
+import java.time.LocalDateTime;
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.dto.ProductDTO;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import java.sql.SQLException;
+
+//import io.jsonwebtoken.io.IOException;
+
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
 
@@ -18,6 +23,6 @@ public interface ProductService {
 
     public ProductDTO updateProduct(Long product_id, Product newProduct) throws ProductNoSuchElementException;
 
-    public ProductDTO createProduct(Product product);
+    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long labelId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SQLException;
     
 }

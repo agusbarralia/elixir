@@ -6,19 +6,34 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
+import com.elixir.elixir.entity.Category;
+import com.elixir.elixir.entity.Label;
 import com.elixir.elixir.entity.Product;
+import com.elixir.elixir.entity.ProductImage;
+import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.entity.dto.ProductDTO;
 //import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import com.elixir.elixir.repository.ProductImageRepository;
 import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.service.Interface.ProductService;
+import java.sql.Blob;
+import javax.sql.rowset.serial.SerialException;
+import java.sql.SQLException;
+
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    
+    @Autowired
+    private ProductImageRepository productImageRepository;
 
     @Override
     public List<ProductDTO> getProducts() {
@@ -73,15 +88,48 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO createProduct(Product product) {
-        // Verificar si ya existe un producto con el mismo nombre
-        Optional<Product> existingProduct = productRepository.findByName(product.getName());
+    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long labelId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SerialException, SQLException  {
+        
+        Optional<Product> existingProduct = productRepository.findByName(name);
         
         if (existingProduct.isPresent()) {
-            throw new IllegalStateException("Ya existe un producto con el nombre " + product.getName());
+            throw new IllegalStateException("Ya existe un producto con el nombre " + name);
         }
+
+        Product product = new Product();
+        product.setName(name);
+        product.setProduct_description(product_description);
+        product.setPrice(price);
+        product.setStock(stock);
+        product.setDate_published(date_published);
+        product.setState(state);
         
+        // Configurar las relaciones
+        Label label = new Label();
+        label.setLabel_id(labelId);
+        product.setLabel(label);
+        
+        SubCategory subCategory = new SubCategory();
+        subCategory.setSubcategory_id(subCategoryId);
+        product.setSubCategory(subCategory);
+        
+        Category category = new Category();
+        category.setCategory_id(categoryId);
+        product.setCategory(category);
+
+
         Product savedProduct = productRepository.save(product);
+
+        for (MultipartFile image : images) {
+            ProductImage productImage = new ProductImage();
+            byte[] bytes = image.getBytes();
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes); 
+            
+            productImage.setImageData(blob);
+            productImage.setProduct(savedProduct);
+            productImageRepository.save(productImage);
+        }
+
         return convertToDTO(savedProduct);
     }
 

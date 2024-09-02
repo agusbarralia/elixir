@@ -62,6 +62,8 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductsOrder> productOrders;
 
+    @OneToMany(mappedBy ="product")
+    private List<ProductImage> productImages;
 
     public boolean getState() {
         return state;

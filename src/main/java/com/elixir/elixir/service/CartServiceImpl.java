@@ -10,6 +10,7 @@ import com.elixir.elixir.entity.User;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
 import com.elixir.elixir.repository.CartRepository;
+import com.elixir.elixir.repository.UserRepository;
 import com.elixir.elixir.service.Interface.CartService;
 import com.elixir.elixir.service.Interface.ProductCartService;
 
@@ -19,6 +20,9 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ProductCartService productCartService;
@@ -33,7 +37,7 @@ public class CartServiceImpl implements CartService {
     }
 
     public CartDTO createCart(Long userId) throws CartDuplicateException {
-        Optional<User> user = cartRepository.findUserById(userId);  //ESTO ESTA MAL DEBERIA DE HACERSE EN EL REPO DE USUARIO 
+        Optional<User> user = userRepository.findById(userId);  //ESTO ESTA MAL DEBERIA DE HACERSE EN EL REPO DE USUARIO 
         Optional<Cart> cart = cartRepository.findByUserId(userId);  //PERO NO EXISTE TODAVIA XD
         if(cart.isEmpty() && user.isPresent()){                    
             Cart newCart = new Cart();

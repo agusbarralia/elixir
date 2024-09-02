@@ -2,23 +2,28 @@ package com.elixir.elixir.controllers;
 
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.dto.ProductDTO;
-//import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.service.Interface.ProductService;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 
 //import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 
 @RestController
@@ -46,10 +51,27 @@ public class ProductController {
     }
 
     @PostMapping("admin/create")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody Product product) throws ProductNoSuchElementException{
-        ProductDTO result = productService.createProduct(product);
+    public ResponseEntity<ProductDTO> createProduct(
+            @RequestParam String name,
+            @RequestParam String product_description,
+            @RequestParam Double price,
+            @RequestParam int stock,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date_published,
+            @RequestParam boolean state,
+            @RequestParam("label[label_id]") Long labelId,
+            @RequestParam("subCategory[subcategory_id]") Long subCategoryId,
+            @RequestParam("category[category_id]") Long categoryId,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images) 
+            throws ProductNoSuchElementException, java.io.IOException, SQLException {
+
+        // Llamar al servicio para crear el producto
+        ProductDTO result = productService.createProduct(name, product_description, price,stock, date_published, state, labelId, subCategoryId, categoryId, images);
+        
+        // Devolver la respuesta
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
     }
+
+
 
     //VER QUE ONDA EL TIPO DE PETICION HTTP ?PUT?
     @PostMapping("admin/update")
