@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 
 import com.elixir.elixir.entity.Category;
-import com.elixir.elixir.entity.Label;
+import com.elixir.elixir.entity.Variety;
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductImage;
 import com.elixir.elixir.entity.SubCategory;
@@ -22,11 +22,11 @@ import com.elixir.elixir.exceptions.ImageNoSuchElementException;
 //import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.repository.CategoryRepository;
-import com.elixir.elixir.repository.LabelRepository;
+import com.elixir.elixir.repository.VarietyRepository;
 import com.elixir.elixir.repository.ProductImageRepository;
 import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.repository.SubCategoryRepository;
-import com.elixir.elixir.repository.LabelRepository;
+import com.elixir.elixir.repository.VarietyRepository;
 import com.elixir.elixir.repository.CategoryRepository;
 
 import com.elixir.elixir.service.Interface.ProductService;
@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     
     @Autowired
-    private LabelRepository labelRepository;
+    private VarietyRepository varietyRepository;
 
     @Autowired
     private SubCategoryRepository subCategoryRepository;
@@ -141,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long labelId, Long subCategoryId, Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException {
+    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long varietyId, Long subCategoryId, Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException {
         Optional<Product> oldProduct = productRepository.findById(id);
         if (oldProduct.isPresent()) {
             Product productToUpdate = oldProduct.get();
@@ -151,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
             productToUpdate.setProduct_description(product_description);
             productToUpdate.setPrice(price);
             productToUpdate.setStock(stock);
-            productToUpdate.setLabel(labelRepository.findById(labelId).get());
+            productToUpdate.setVariety(varietyRepository.findById(varietyId).get());
             productToUpdate.setSubCategory(subCategoryRepository.findById(subCategoryId).get());
             productToUpdate.setCategory(categoryRepository.findById(categoryId).get());
             productToUpdate.setProductImages(imagesUpdate);
@@ -166,7 +166,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long labelId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SerialException, SQLException  {
+    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SerialException, SQLException  {
         
         Optional<Product> existingProduct = productRepository.findByName(name);
         
@@ -183,7 +183,7 @@ public class ProductServiceImpl implements ProductService {
         product.setState(state);
         
         // Configurar las relaciones
-        product.setLabel(labelRepository.findById(labelId).get());
+        product.setVariety(varietyRepository.findById(varietyId).get());
         
 
         product.setSubCategory(subCategoryRepository.findById(subCategoryId).get());
@@ -230,7 +230,7 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setStock(product.getStock());
         productDTO.setDatePublished(product.getDate_published());
         productDTO.setState(product.getState());
-        productDTO.setLabelId(product.getLabel() != null ? product.getLabel().getLabel_id() : null);
+        productDTO.setVarietyId(product.getVariety() != null ? product.getVariety().getVariety_id() : null);
         productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubcategory_id() : null);
         productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
         productDTO.setImagesList(imageDTOs);

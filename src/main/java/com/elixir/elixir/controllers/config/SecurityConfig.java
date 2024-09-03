@@ -38,8 +38,8 @@ public class SecurityConfig {
                                             .requestMatchers("/subcategories/**").permitAll()
                                             .requestMatchers("/subcategories/admin/**").hasAnyAuthority(Role.ADMIN.name())
 
-                                            .requestMatchers("/label/**").permitAll()
-                                            .requestMatchers("/label/admin/**").hasAnyAuthority(Role.ADMIN.name())
+                                            .requestMatchers("/varieties/**").permitAll()
+                                            .requestMatchers("/varieties/admin/**").hasAnyAuthority(Role.ADMIN.name())
 
                                             .requestMatchers("/products/**").permitAll()
                                             .requestMatchers("/products/admin/**").hasAnyAuthority(Role.ADMIN.name())

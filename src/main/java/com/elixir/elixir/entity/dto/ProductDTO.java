@@ -20,7 +20,7 @@ public class ProductDTO {
     private int stock;
     private LocalDateTime datePublished;
     private boolean state;
-    private Long labelId;
+    private Long varietyId;
     private Long subCategoryId;
     private Long categoryId;
     private List<ProductImageDTO> imagesList;

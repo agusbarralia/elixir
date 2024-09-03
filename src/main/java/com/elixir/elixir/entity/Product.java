@@ -44,8 +44,8 @@ public class Product {
     private boolean state;
 
     @ManyToOne
-    @JoinColumn(name = "label_id", referencedColumnName = "label_id")
-    private Label label;
+    @JoinColumn(name = "variety_id", referencedColumnName = "variety_id")
+    private Variety variety;
 
     @ManyToOne
     @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id")

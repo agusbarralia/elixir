@@ -1,6 +1,6 @@
 package com.elixir.elixir.controllers;
 
-import com.elixir.elixir.entity.Product;
+//import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.dto.ProductDTO;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.service.Interface.ProductService;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.SQLException;
@@ -57,14 +57,14 @@ public class ProductController {
             @RequestParam int stock,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date_published,
             @RequestParam boolean state,
-            @RequestParam Long labelId,
+            @RequestParam Long varietyId,
             @RequestParam Long subCategoryId,
             @RequestParam Long categoryId,
             @RequestParam(value = "images", required = false) List<MultipartFile> images) 
             throws ProductNoSuchElementException, java.io.IOException, SQLException {
 
         // Llamar al servicio para crear el producto
-        ProductDTO result = productService.createProduct(name, product_description, price,stock, date_published, state, labelId, subCategoryId, categoryId, images);
+        ProductDTO result = productService.createProduct(name, product_description, price,stock, date_published, state, varietyId, subCategoryId, categoryId, images);
         
         // Devolver la respuesta
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
@@ -78,13 +78,13 @@ public class ProductController {
             @RequestParam String product_description,
             @RequestParam Double price,
             @RequestParam int stock,
-            @RequestParam Long labelId,
+            @RequestParam Long varietyId,
             @RequestParam Long subCategoryId,
             @RequestParam Long categoryId,
             @RequestParam(value = "images", required = false) List<MultipartFile> images) 
             throws ProductNoSuchElementException, java.io.IOException, SQLException {
 
-        ProductDTO result = productService.updateProduct(id,name, product_description, price,stock, labelId, subCategoryId, categoryId, images);
+        ProductDTO result = productService.updateProduct(id,name, product_description, price,stock, varietyId, subCategoryId, categoryId, images);
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
     }
 

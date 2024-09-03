@@ -15,14 +15,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Label {
+public class Variety {
 
-    public Label(String name) {
+    public Variety(String name) {
         this.name = name;
         }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long label_id;
+    private Long variety_id;
 
     private String name;
 

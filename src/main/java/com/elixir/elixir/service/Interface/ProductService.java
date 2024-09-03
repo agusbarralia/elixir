@@ -31,8 +31,8 @@ public interface ProductService {
 
     public List<ProductImage> updateProductImages(Product productToUpdate, List<MultipartFile> newImages)throws IOException, SerialException, SQLException, java.io.IOException;
 
-    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long labelId, Long subCategoryId, Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException;
+    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long varietyId, Long subCategoryId, Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException;
 
-    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long labelId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SQLException;
+    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SQLException;
     
 }
