@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-
 @RestController
 @RequestMapping("products")
 public class ProductController {

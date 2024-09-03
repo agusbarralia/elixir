@@ -34,7 +34,7 @@ public class CategoryController {
             return ResponseEntity.ok(categoryService.getCategoryByName(category_name).get());
     }
     
-    @PostMapping("/{category_name}")
+    @PostMapping("/admin/{category_name}")
     public ResponseEntity<Category> createCategory(@PathVariable String category_name)
         throws CategoryDuplicateException{
             Category result = categoryService.createCategory(category_name);

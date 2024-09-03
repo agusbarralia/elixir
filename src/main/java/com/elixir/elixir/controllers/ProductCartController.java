@@ -27,6 +27,7 @@ public class ProductCartController {
         return productCartService.getProductCartByCartId(cart_id);
     }
     
+    // ESTA REQUEST NO DEBERIA DE NECESITAR UN PRODUCTO Y QUE EL PRODUCTCART SE CREE A PARTIR DE EL PRODUCTO DADO???
     @PostMapping("/addtocart")
     public ResponseEntity<List<ProductsCartDTO>> addtoCart(@RequestBody ProductsCart productsCart) {
         ProductsCartDTO result = productCartService.addtoCart(productsCart);
