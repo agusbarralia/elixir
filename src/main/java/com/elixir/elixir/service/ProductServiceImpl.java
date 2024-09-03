@@ -181,17 +181,12 @@ public class ProductServiceImpl implements ProductService {
         product.setState(state);
         
         // Configurar las relaciones
-        Label label = new Label();
-        label.setLabel_id(labelId);
-        product.setLabel(label);
+        product.setLabel(labelRepository.findById(labelId).get());
         
-        SubCategory subCategory = new SubCategory();
-        subCategory.setSubcategory_id(subCategoryId);
-        product.setSubCategory(subCategory);
+
+        product.setSubCategory(subCategoryRepository.findById(subCategoryId).get());
         
-        Category category = new Category();
-        category.setCategory_id(categoryId);
-        product.setCategory(category);
+        product.setCategory(categoryRepository.findById(categoryId).get());
 
 
         Product savedProduct = productRepository.save(product);

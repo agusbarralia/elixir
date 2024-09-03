@@ -11,7 +11,6 @@ import com.elixir.elixir.entity.ProductImage;
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long>{
 
-
     @Transactional
     @Modifying
     @Query("DELETE FROM ProductImage p WHERE p.product.product_id = ?1")
