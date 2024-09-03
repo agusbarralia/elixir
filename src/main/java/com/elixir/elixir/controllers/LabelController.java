@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("label")
-
-
 public class LabelController {
     @Autowired
     private LabelService labelService;

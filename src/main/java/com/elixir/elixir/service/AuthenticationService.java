@@ -9,12 +9,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.repository.UserRepository;
 import com.elixir.elixir.controllers.auth.AuthenticationResponse;
 import com.elixir.elixir.controllers.auth.AuthenticationRequest;
 //import com.elixir.elixir.controllers.auth.AuthenticationController;
 import com.elixir.elixir.controllers.auth.RegisterRequest;
 import com.elixir.elixir.controllers.config.JwtService;
+import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
+    private final CartRepository cartRepository;
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -40,6 +44,11 @@ public class AuthenticationService {
                             .build();
 
             repository.save(user);
+
+            var cart = new Cart();
+            cart.setUser(user);
+            cartRepository.save(cart);
+
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                             .accessToken(jwtToken)
@@ -59,7 +68,4 @@ public class AuthenticationService {
                             .accessToken(jwtToken)
                             .build();
     }
-
-
-
 }

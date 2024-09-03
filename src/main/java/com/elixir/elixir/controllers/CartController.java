@@ -32,6 +32,7 @@ public class CartController {
 
     }
 
+    //QUE HACEMOS CON ESTA REQUEST? ES NECESARIA? O SIMPLEMENTE QUE CUANDO SE CREA UN USUARIO SE LLAME AL CARTSERVICE Y SE CREE UN CARRITO EN ESE MOMENTO AUTOMATICAMENTE???
     @PostMapping("/{user_id}")
     public ResponseEntity<CartDTO> createCart(@PathVariable Long user_id) throws CartDuplicateException{
         CartDTO result = cartService.createCart(user_id);

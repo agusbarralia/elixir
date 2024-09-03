@@ -1,10 +1,10 @@
 package com.elixir.elixir.service.Interface;
 
-import com.elixir.elixir.entity.Order;
 import com.elixir.elixir.entity.User;
+import com.elixir.elixir.entity.dto.OrderDTO;
 
 public interface CheckoutService {
     
-    public Order checkout(User user);
+    public OrderDTO checkout(User user) throws IllegalStateException;
 
 }

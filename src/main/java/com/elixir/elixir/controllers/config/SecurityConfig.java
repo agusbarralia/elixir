@@ -49,6 +49,9 @@ public class SecurityConfig {
                                             .requestMatchers("/productscart/**").hasAnyAuthority(Role.USER.name())
 
                                             .requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
+
+                                            .requestMatchers("/order/admin/**").hasAnyAuthority(Role.ADMIN.name())
+
                                             .anyRequest()
                                             .authenticated())
                             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
