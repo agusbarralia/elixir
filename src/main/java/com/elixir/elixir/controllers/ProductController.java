@@ -58,9 +58,9 @@ public class ProductController {
             @RequestParam int stock,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date_published,
             @RequestParam boolean state,
-            @RequestParam("label[label_id]") Long labelId,
-            @RequestParam("subCategory[subcategory_id]") Long subCategoryId,
-            @RequestParam("category[category_id]") Long categoryId,
+            @RequestParam Long labelId,
+            @RequestParam Long subCategoryId,
+            @RequestParam Long categoryId,
             @RequestParam(value = "images", required = false) List<MultipartFile> images) 
             throws ProductNoSuchElementException, java.io.IOException, SQLException {
 
@@ -71,12 +71,21 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
     }
 
-
-
     //VER QUE ONDA EL TIPO DE PETICION HTTP ?PUT?
     @PostMapping("admin/update")
-    public ResponseEntity<ProductDTO> updateProduct(@RequestBody Product product) throws ProductNoSuchElementException{
-        ProductDTO result = productService.updateProduct(product.getProduct_id(),product);
+    public ResponseEntity<ProductDTO> updateProduct(
+            @RequestParam long id,
+            @RequestParam String name,
+            @RequestParam String product_description,
+            @RequestParam Double price,
+            @RequestParam int stock,
+            @RequestParam Long labelId,
+            @RequestParam Long subCategoryId,
+            @RequestParam Long categoryId,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images) 
+            throws ProductNoSuchElementException, java.io.IOException, SQLException {
+
+        ProductDTO result = productService.updateProduct(id,name, product_description, price,stock, labelId, subCategoryId, categoryId, images);
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
     }
 

@@ -1,6 +1,7 @@
 package com.elixir.elixir.service;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,11 +17,22 @@ import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductImage;
 import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.entity.dto.ProductDTO;
+import com.elixir.elixir.exceptions.ImageNoSuchElementException;
 //import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import com.elixir.elixir.repository.CategoryRepository;
+import com.elixir.elixir.repository.LabelRepository;
 import com.elixir.elixir.repository.ProductImageRepository;
 import com.elixir.elixir.repository.ProductRepository;
+import com.elixir.elixir.repository.SubCategoryRepository;
+import com.elixir.elixir.repository.LabelRepository;
+import com.elixir.elixir.repository.CategoryRepository;
+
 import com.elixir.elixir.service.Interface.ProductService;
+import javax.sql.rowset.serial.SerialBlob;
+
+import io.jsonwebtoken.io.IOException;
+
 import java.sql.Blob;
 import javax.sql.rowset.serial.SerialException;
 import java.sql.SQLException;
@@ -31,6 +43,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    
+    @Autowired
+    private LabelRepository labelRepository;
+
+    @Autowired
+    private SubCategoryRepository subCategoryRepository;
+    
+    @Autowired
+    private CategoryRepository categoryRepository;
     
     @Autowired
     private ProductImageRepository productImageRepository;
@@ -76,15 +97,70 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Override
-    public ProductDTO updateProduct(Long product_id, Product newProduct) throws ProductNoSuchElementException {
-        Optional<Product> oldProduct = productRepository.findById(product_id);
-        if (oldProduct.isPresent()) {
-            Product updatedProduct = productRepository.save(newProduct);
-            return convertToDTO(updatedProduct);
+    public void deleteProductImage(Long productId, Long imageId) throws ProductNoSuchElementException, ImageNoSuchElementException {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            Optional<ProductImage> imageOptional = product.getProductImages().stream()
+                    .filter(image -> image.getId().equals(imageId))
+                    .findFirst();
+            if (imageOptional.isPresent()) {
+                ProductImage imageToDelete = imageOptional.get();
+                product.getProductImages().remove(imageToDelete);
+                productRepository.save(product);
+            } else {
+                throw new ImageNoSuchElementException();
+            }
         } else {
             throw new ProductNoSuchElementException();
         }
+    }
+
+    public List<ProductImage> updateProductImages(Product productToUpdate, List<MultipartFile> newImages) throws IOException, SerialException, SQLException, java.io.IOException {
+        List<ProductImage> updatedImages = new ArrayList<>();
+
+        productImageRepository.deleteByProductId(productToUpdate.getProduct_id());
+
+        for (MultipartFile image : newImages) {
+            ProductImage productImage = new ProductImage();
+            productImage.setProduct(productToUpdate);
+            try {
+                byte[] imageBytes = image.getBytes();
+                Blob imageBlob = new SerialBlob(imageBytes);
+                productImage.setImageData(imageBlob);
+            } catch (IOException e) {
+                // Manejo de la excepción
+                throw new IOException("Error al leer la imagen", e);
+            }
+            updatedImages.add(productImage);
+            productImageRepository.save(productImage);
+        }
+        return updatedImages;
+    }
+
+    @Override
+    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long labelId, Long subCategoryId, Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException {
+        Optional<Product> oldProduct = productRepository.findById(id);
+        if (oldProduct.isPresent()) {
+            Product productToUpdate = oldProduct.get();
+            System.out.println(newImages);
+            List<ProductImage> imagesUpdate = updateProductImages(productToUpdate, newImages);
+            productToUpdate.setName(name);
+            productToUpdate.setProduct_description(product_description);
+            productToUpdate.setPrice(price);
+            productToUpdate.setStock(stock);
+            productToUpdate.setLabel(labelRepository.findById(labelId).get());
+            productToUpdate.setSubCategory(subCategoryRepository.findById(subCategoryId).get());
+            productToUpdate.setCategory(categoryRepository.findById(categoryId).get());
+            productToUpdate.setProductImages(imagesUpdate);
+            Product updatedProduct = productRepository.save(productToUpdate);
+            return convertToDTO(updatedProduct);
+            // Actualizar las imágenes del producto
+        } else {
+            throw new ProductNoSuchElementException();
+        }
+        
+
     }
 
     @Override
