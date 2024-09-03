@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import jakarta.transaction.Transactional;
 
 import com.elixir.elixir.entity.ProductImage;
+import java.util.List;
 
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long>{
@@ -16,4 +17,6 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
     @Query("DELETE FROM ProductImage p WHERE p.product.product_id = ?1")
     void deleteByProductId(Long productId);
     
+    @Query("SELECT p FROM ProductImage p WHERE p.product.product_id = ?1")
+    List<ProductImage> findAllByProductId(Long productId);
 }

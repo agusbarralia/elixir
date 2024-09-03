@@ -17,6 +17,7 @@ import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductImage;
 import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.entity.dto.ProductDTO;
+import com.elixir.elixir.entity.dto.ProductImageDTO;
 import com.elixir.elixir.exceptions.ImageNoSuchElementException;
 //import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
@@ -34,6 +35,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import io.jsonwebtoken.io.IOException;
 
 import java.sql.Blob;
+import java.util.Base64;
 import javax.sql.rowset.serial.SerialException;
 import java.sql.SQLException;
 
@@ -205,6 +207,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDTO convertToDTO(Product product) {
+
+        List<ProductImage> images = productImageRepository.findAllByProductId(product.getProduct_id());
+        
+        List<ProductImageDTO> imageDTOs = images.stream().map(image -> {
+            try {
+                String encodedString = Base64.getEncoder()
+                    .encodeToString(image.getImageData().getBytes(1, (int) image.getImageData().length()));
+
+                return new ProductImageDTO(encodedString);
+            } catch (SQLException e) {
+                // Manejo de la excepción
+                throw new RuntimeException("Error encoding image to base64", e);
+            }
+        }).collect(Collectors.toList());
+
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProductId(product.getProduct_id());
         productDTO.setName(product.getName());
@@ -216,6 +233,7 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setLabelId(product.getLabel() != null ? product.getLabel().getLabel_id() : null);
         productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubcategory_id() : null);
         productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
+        productDTO.setImagesList(imageDTOs);
         return productDTO;
     }
 

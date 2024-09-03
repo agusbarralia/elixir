@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
+
+import com.elixir.elixir.entity.dto.ProductImageDTO;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +23,6 @@ public class ProductDTO {
     private Long labelId;
     private Long subCategoryId;
     private Long categoryId;
+    private List<ProductImageDTO> imagesList;
 
 }
