@@ -5,14 +5,18 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import com.elixir.elixir.entity.Cart;
+import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.dto.CartDTO;
+import com.elixir.elixir.entity.dto.ProductsCartDTO;
 import com.elixir.elixir.entity.User;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
 import com.elixir.elixir.repository.CartRepository;
+import com.elixir.elixir.repository.ProductCartRepository;
 import com.elixir.elixir.repository.UserRepository;
 import com.elixir.elixir.service.Interface.CartService;
 import com.elixir.elixir.service.Interface.ProductCartService;
+import com.elixir.elixir.service.Interface.UserService;
 
 
 @Service
@@ -27,8 +31,15 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ProductCartService productCartService;
 
-    public CartDTO getCartByUserId(Long userId) throws CartNoSuchElementException{
-        Optional<Cart> cart = cartRepository.findByUserId(userId);
+    @Autowired
+    private ProductCartRepository productCartRepository;
+
+    @Autowired
+    private UserService userService;
+
+
+    public CartDTO getCartByUserId() throws CartNoSuchElementException{
+        Optional<Cart> cart = cartRepository.findByUserId(userService.getCurrentUserId());
         if (cart.isPresent()) {
             return convertToDto(cart.get());
         } else {
@@ -36,16 +47,10 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    public CartDTO createCart(Long userId) throws CartDuplicateException {
-        Optional<User> user = userRepository.findById(userId);  //ESTO ESTA MAL DEBERIA DE HACERSE EN EL REPO DE USUARIO 
-        Optional<Cart> cart = cartRepository.findByUserId(userId);  //PERO NO EXISTE TODAVIA XD
-        if(cart.isEmpty() && user.isPresent()){                    
-            Cart newCart = new Cart();
-            newCart.setUser(user.get());
-            cartRepository.save(newCart);
-            return convertToDto(newCart);
-        }
-        throw new CartDuplicateException();
+    public void createCart(User user) {
+        Cart newCart = new Cart();
+        newCart.setUser(user);
+        cartRepository.save(newCart);
     }
 
     public CartDTO convertToDto(Cart cart) {

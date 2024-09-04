@@ -2,9 +2,12 @@ package com.elixir.elixir.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import com.elixir.elixir.controllers.auth.RegisterRequest;
 import com.elixir.elixir.controllers.config.JwtService;
 import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.User;
+import com.elixir.elixir.exceptions.CartDuplicateException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,11 +29,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final CartRepository cartRepository;
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    private final CartServiceImpl cartService;
+
+    
+    
+
 
     public AuthenticationResponse register(RegisterRequest request) {
             var user = User.builder()
@@ -44,11 +54,8 @@ public class AuthenticationService {
                             .build();
 
             repository.save(user);
-
-            var cart = new Cart();
-            cart.setUser(user);
-            cartRepository.save(cart);
-
+            //Le creo el carrito al usuario
+            cartService.createCart(user);
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                             .accessToken(jwtToken)
@@ -68,4 +75,11 @@ public class AuthenticationService {
                             .accessToken(jwtToken)
                             .build();
     }
+
+
+
 }
+
+
+
+
