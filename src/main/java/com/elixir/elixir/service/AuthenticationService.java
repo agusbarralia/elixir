@@ -17,6 +17,7 @@ import com.elixir.elixir.controllers.auth.AuthenticationRequest;
 import com.elixir.elixir.controllers.auth.RegisterRequest;
 import com.elixir.elixir.controllers.config.JwtService;
 import com.elixir.elixir.entity.User;
+import com.elixir.elixir.exceptions.CartDuplicateException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +33,7 @@ public class AuthenticationService {
     @Autowired
     private final CartServiceImpl cartService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) throws CartDuplicateException {
             var user = User.builder()
                             .name(request.getFirstname())
                             .last_name(request.getLastname())
@@ -47,6 +48,7 @@ public class AuthenticationService {
             repository.save(user);
             //Le creo el carrito al usuario
             cartService.createCart(user);
+            
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                             .accessToken(jwtToken)

@@ -37,6 +37,16 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private UserService userService;
 
+    public void createCart(User user) throws CartDuplicateException {
+        Optional<Cart> cart = cartRepository.findByUserId(user.getUser_id());
+        if (cart.isPresent()) {
+            throw new CartDuplicateException();
+        } else {
+            Cart newCart = new Cart();
+            newCart.setUser(user);
+            cartRepository.save(newCart);
+        }
+    }
 
     public CartDTO getCartByUserId() throws CartNoSuchElementException{
         Optional<Cart> cart = cartRepository.findByUserId(userService.getCurrentUserId());
@@ -47,10 +57,33 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    public void createCart(User user) {
-        Cart newCart = new Cart();
-        newCart.setUser(user);
-        cartRepository.save(newCart);
+    public ProductsCartDTO addProductToCart(Long product_id, int quantity) throws CartNoSuchElementException {
+        Optional<Cart> cart = cartRepository.findByUserId(userService.getCurrentUserId());
+        if (cart.isPresent()) {
+            ProductsCartDTO productsCartDTO = productCartService.createProductCart(product_id, quantity, cart.get());
+            return productsCartDTO;
+        }
+        else{
+            throw new CartNoSuchElementException();
+        }
+    }
+
+    public void removeProductFromCart(Long product_id) throws CartNoSuchElementException {
+        Optional<ProductsCart> productCart = productCartRepository.findById(product_id);
+        if (productCart.isPresent()) {
+            productCartRepository.deleteById(product_id);
+        } else {
+            throw new CartNoSuchElementException();
+        }
+    }
+
+    public void removeAllProductsFromCart() throws CartNoSuchElementException {
+        Optional<Cart> cart = cartRepository.findByUserId(userService.getCurrentUserId());
+        if (cart.isPresent()) {
+            productCartRepository.deleteByCartId(cart.get().getCart_id());
+        } else {
+            throw new CartNoSuchElementException();
+        }
     }
 
     public CartDTO convertToDto(Cart cart) {
