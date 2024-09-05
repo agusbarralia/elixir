@@ -23,6 +23,7 @@ public class ProductDTO {
     private Long varietyId;
     private Long subCategoryId;
     private Long categoryId;
+    private float discount;
     private List<ProductImageDTO> imagesList;
 
 }

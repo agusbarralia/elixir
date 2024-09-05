@@ -35,4 +35,5 @@ public interface ProductService {
 
     public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SQLException;
     
+    public void updateProductDiscount(Long productId, float discount);
 }

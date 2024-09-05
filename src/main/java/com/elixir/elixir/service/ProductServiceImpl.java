@@ -181,6 +181,7 @@ public class ProductServiceImpl implements ProductService {
         product.setStock(stock);
         product.setDate_published(date_published);
         product.setState(state);
+        product.setDiscount(0);
         
         // Configurar las relaciones
         product.setVariety(varietyRepository.findById(varietyId).get());
@@ -234,9 +235,20 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubcategory_id() : null);
         productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
         productDTO.setImagesList(imageDTOs);
+        productDTO.setDiscount(product.getDiscount());
         return productDTO;
     }
 
     
+    public void updateProductDiscount(Long productId, float discount){
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+
+        product.setDiscount(discount);
+        productRepository.save(product);
+    }
+
+
 
 }

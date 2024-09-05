@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("products")
@@ -96,4 +100,20 @@ public class ProductController {
     return ResponseEntity.ok(productService.changeState(product_id));    
     }
     
+    @PutMapping("admin/updateDiscount")
+    public ResponseEntity<String> updateDiscount(@RequestParam("product_id") Long productId, @RequestParam("discount") float discount) {
+    
+          try {
+            if(discount >= 0 && discount <= 0.8){ //Nosotros lo seteamos asi
+                productService.updateProductDiscount(productId, discount);
+                return ResponseEntity.ok("El descuento se aplico exitosamente!");
+            }else{
+                return ResponseEntity.ok("Error: El descuento debe valer entre 0 y 0,8");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Error al actualizar el descuento: " + e.getMessage());
+        }
+    }
 }
+   
