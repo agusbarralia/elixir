@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.service.AuthenticationService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request) {
+            @RequestBody RegisterRequest request) throws CartDuplicateException {
         return ResponseEntity.ok(service.register(request));
     }
 

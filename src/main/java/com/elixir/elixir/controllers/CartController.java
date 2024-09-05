@@ -12,7 +12,7 @@ import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.User;
 //import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.dto.CartDTO;
-
+import com.elixir.elixir.entity.dto.ProductsCartDTO;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
 import com.elixir.elixir.service.Interface.CartService;
@@ -40,14 +40,9 @@ public class CartController {
         return ResponseEntity.ok(cartService.getCartByUserId());
     }
 
-    /*
-    @PostMapping("/products")
-    public String postMethodName(@RequestParam Long productId, @RequestParam int quantity) {
-        cartService.
-        return entity;
+    @PostMapping("/add")
+    public ResponseEntity<ProductsCartDTO> addToCart(@RequestParam Long productId, @RequestParam int quantity) throws CartNoSuchElementException {
+        ProductsCartDTO currentProductCartDTO = cartService.addProductToCart(productId, quantity);
+        return ResponseEntity.ok(currentProductCartDTO);
     }
-     */
-
-
-
 }

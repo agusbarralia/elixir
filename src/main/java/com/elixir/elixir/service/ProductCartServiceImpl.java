@@ -8,53 +8,38 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.elixir.elixir.entity.Cart;
+import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.dto.ProductsCartDTO;
 import com.elixir.elixir.repository.ProductCartRepository;
+import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.service.Interface.ProductCartService;
 
 @Service
 public class ProductCartServiceImpl implements ProductCartService {
     
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     private ProductCartRepository productCartRepository;
 
     @Override
-    public List<ProductsCartDTO> getProductCartByCartId(Long cart_id) {
-        List<ProductsCart> productsCarts = productCartRepository.findByCartId(cart_id);
-        return productsCarts.stream()
-                            .map(this::convertToDTO)
-                            .collect(Collectors.toList());
-    }
+    public ProductsCartDTO createProductCart(Long product_id, int quantity, Cart cart) {
+        ProductsCart productsCart = new ProductsCart();
 
-    @Override
-    public ProductsCartDTO addtoCart(ProductsCart productsCart) {
-        Optional<ProductsCart> existingProductCart = productCartRepository
-        .findByCartAndProduct(productsCart.getCart(), productsCart.getProduct());
+        Product product = productRepository.findById(product_id)
+                    .orElseThrow(() -> new IllegalStateException("Producto no encontrado."));
         
-        if (existingProductCart.isPresent()) {
-            // Si ya existe, sumarle la cantidad
-            ProductsCart productInCart = existingProductCart.get();
-            productInCart.setQuantity(productInCart.getQuantity() + productsCart.getQuantity());
-            productInCart.setSubtotal(productInCart.getSubtotal() + productsCart.getSubtotal());
-            ProductsCart updatedProductCart = productCartRepository.save(productInCart);
-            return convertToDTO(updatedProductCart);
-        } else {
-            // Si no existe, agregarlo como nuevo
-            ProductsCart savedProductCart = productCartRepository.save(productsCart);
-            return convertToDTO(savedProductCart);
-        }
-
-    }
-
-    @Override
-    public void removeProduct(Long productscart_id) {
-        productCartRepository.deleteById(productscart_id);
-    }
-
-    @Override
-    public void removeAllProducts(Long cart_id) {
-        productCartRepository.deleteByCartId(cart_id);
+        productsCart.setProduct(product);
+        productsCart.setUnit_price(product.getPrice());
+        productsCart.setSubtotal(product.getPrice() * quantity);
+        productsCart.setQuantity(quantity);
+        productsCart.setCart(cart);
+        productCartRepository.save(productsCart);
+        return convertToDTO(productsCart);
+        
     }
 
     @Override
@@ -67,7 +52,7 @@ public class ProductCartServiceImpl implements ProductCartService {
         return Collections.emptyList();
     }
 
-    private ProductsCartDTO convertToDTO(ProductsCart productsCart) {
+    public ProductsCartDTO convertToDTO(ProductsCart productsCart) {
         return new ProductsCartDTO(
             productsCart.getProductscart_id(),
             productsCart.getQuantity(),
