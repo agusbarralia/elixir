@@ -30,6 +30,9 @@ public class ProductsCart {
     @Column
     private Double subtotal;
 
+    @Column
+    private float discount;
+
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "cart_id")
     private Cart cart;

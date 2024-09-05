@@ -43,6 +43,10 @@ public class Product {
     @Column
     private boolean state;
 
+    @Column
+    private float discount;
+    
+
     @ManyToOne
     @JoinColumn(name = "variety_id", referencedColumnName = "variety_id")
     private Variety variety;

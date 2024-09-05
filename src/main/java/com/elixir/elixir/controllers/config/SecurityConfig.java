@@ -41,8 +41,8 @@ public class SecurityConfig {
                                             .requestMatchers("/varieties/**").permitAll()
                                             .requestMatchers("/varieties/admin/**").hasAnyAuthority(Role.ADMIN.name())
 
-                                            .requestMatchers("/products/**").permitAll()
                                             .requestMatchers("/products/admin/**").hasAnyAuthority(Role.ADMIN.name())
+                                            .requestMatchers("/products/**").permitAll()
                                             
                                             //.requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
 
