@@ -20,5 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.user.user_id = :user_id")
     List<Order> findByUser_id(Long user_id);
 
+    @Query("SELECT o FROM Order o WHERE o.user.user_id = :user_id ORDER BY o.order_date DESC")
+    Optional<Order> findLatestOrderByUserId(Long user_id);
 
 }

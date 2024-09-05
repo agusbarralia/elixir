@@ -55,15 +55,9 @@ public class Product {
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
-
-    @OneToMany(mappedBy = "product")
-    private List<ProductsCart> productsCarts;
-
-    @OneToMany(mappedBy = "product")
-    private List<ProductsOrder> productOrders;
-
     @OneToMany(mappedBy ="product")
     private List<ProductImage> productImages;
+
 
     public boolean getState() {
         return state;

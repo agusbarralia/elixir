@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elixir.elixir.entity.dto.OrderDTO;
 import com.elixir.elixir.exceptions.OrderNoSuchElementException;
-import com.elixir.elixir.service.OrderServiceImpl;
+import com.elixir.elixir.service.Interface.OrderService;
+import com.elixir.elixir.service.Interface.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,16 +20,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class OrderController {
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
+
+    @Autowired
+    private UserService userService;
     
     @GetMapping("/admin")
     public List<OrderDTO> getOrders() {
         return orderService.getOrders();
     }
 
-    @GetMapping("/user_id")
-    public List<OrderDTO> getOrdersByUserId(@RequestParam Long user_id) {
-        return orderService.getOrdersByUserId(user_id);
+    @GetMapping
+    public List<OrderDTO> getOrdersByUserId() {
+        //obtengo el id
+        Long userId = userService.getCurrentUserId();
+
+        return orderService.getOrdersByUserId(userId);
     }
     
     @GetMapping("/order_id")

@@ -5,6 +5,6 @@ import com.elixir.elixir.entity.dto.OrderDTO;
 
 public interface CheckoutService {
     
-    public OrderDTO checkout(User user) throws IllegalStateException;
+    public OrderDTO checkout() throws IllegalStateException;
 
 }

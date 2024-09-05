@@ -18,6 +18,8 @@ import com.elixir.elixir.repository.OrderStateRepository;
 import com.elixir.elixir.repository.ProductCartRepository;
 import com.elixir.elixir.repository.ProductsOrderRepository;
 import com.elixir.elixir.service.Interface.CheckoutService;
+import com.elixir.elixir.service.Interface.OrderService;
+import com.elixir.elixir.service.Interface.UserService;
 
 @Service
 public class CheckoutServiceImpl implements CheckoutService {
@@ -40,11 +42,16 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Autowired
     private OrderServiceImpl orderService;
 
-    public OrderDTO checkout(User user) throws IllegalStateException {
+    @Autowired
+    private UserService userService;
+
+    public OrderDTO checkout() throws IllegalStateException {
+
+        Long userId = userService.getCurrentUserId();
 
         //VALIDAR QUE EL CARRITO NO ESTÉ VACÍO
         //PREGUNTAR SI HAY STOCK
-        Cart cart = cartRepository.findByUserId(user.getUser_id())
+        Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new IllegalStateException("Carrito no encontrado para el usuario"));
 
         if (cart.getProducts().isEmpty()) {
@@ -63,7 +70,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         });
 
         Order order = new Order();
-        order.setUser(user);
+        order.setUser(userService.getUserById(userId));
         
         order.setOrderState(orderStateRepository.findByName("Pending").get()); // Asigna el estado "Pendiente" u otro estado inicial
         order.setOrder_date(LocalDateTime.now());
@@ -91,11 +98,9 @@ public class CheckoutServiceImpl implements CheckoutService {
         
         // Limpia el carrito después del checkout
         productCartRepository.deleteByCartId(cart.getCart_id());
-
-        return orderService.convertToOrderDTO(order);
         
+        return orderService.convertToOrderDTO(order);
     }
-
 
     public Float getTotal(List<ProductsOrder> productsOrderList) {
         return (float) productsOrderList.stream().mapToDouble(ProductsOrder::getSubtotal).sum();

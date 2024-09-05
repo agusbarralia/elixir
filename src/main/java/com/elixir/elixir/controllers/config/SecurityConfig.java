@@ -44,11 +44,11 @@ public class SecurityConfig {
                                             .requestMatchers("/products/**").permitAll()
                                             .requestMatchers("/products/admin/**").hasAnyAuthority(Role.ADMIN.name())
                                             
-                                            .requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
+                                            //.requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
 
-                                            .requestMatchers("/productscart/**").hasAnyAuthority(Role.USER.name())
+                                            //.requestMatchers("/productscart/**").hasAnyAuthority(Role.USER.name())
 
-                                            .requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
+                                            //.requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
 
                                             .requestMatchers("/order/admin/**").hasAnyAuthority(Role.ADMIN.name())
 

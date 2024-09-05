@@ -6,22 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.repository.UserRepository;
 import com.elixir.elixir.controllers.auth.AuthenticationResponse;
 import com.elixir.elixir.controllers.auth.AuthenticationRequest;
 //import com.elixir.elixir.controllers.auth.AuthenticationController;
 import com.elixir.elixir.controllers.auth.RegisterRequest;
 import com.elixir.elixir.controllers.config.JwtService;
-import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.User;
-import com.elixir.elixir.exceptions.CartDuplicateException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,10 +31,6 @@ public class AuthenticationService {
 
     @Autowired
     private final CartServiceImpl cartService;
-
-    
-    
-
 
     public AuthenticationResponse register(RegisterRequest request) {
             var user = User.builder()

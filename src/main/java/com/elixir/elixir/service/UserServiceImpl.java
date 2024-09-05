@@ -21,5 +21,7 @@ public class UserServiceImpl implements UserService {
         User user = (User) authentication.getPrincipal(); 
         return user.getUser_id(); // Devuelve el ID del usuario
     }
-    
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
