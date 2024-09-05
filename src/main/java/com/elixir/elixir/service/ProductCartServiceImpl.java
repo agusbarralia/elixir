@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elixir.elixir.entity.Cart;
+import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.dto.ProductsCartDTO;
 import com.elixir.elixir.repository.ProductCartRepository;
@@ -27,12 +28,18 @@ public class ProductCartServiceImpl implements ProductCartService {
     @Override
     public ProductsCartDTO createProductCart(Long product_id, int quantity, Cart cart) {
         ProductsCart productsCart = new ProductsCart();
-        productsCart.setProduct(productRepository.findById(product_id).get());
+
+        Product product = productRepository.findById(product_id)
+                    .orElseThrow(() -> new IllegalStateException("Producto no encontrado."));
+        
+        productsCart.setProduct(product);
+        productsCart.setUnit_price(product.getPrice());
+        productsCart.setSubtotal(product.getPrice() * quantity);
         productsCart.setQuantity(quantity);
         productsCart.setCart(cart);
         productCartRepository.save(productsCart);
         return convertToDTO(productsCart);
-
+        
     }
 
     @Override

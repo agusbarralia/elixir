@@ -41,12 +41,8 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ProductsCartDTO> addToCart(@RequestParam Long productId, @RequestParam int quantity) {
+    public ResponseEntity<ProductsCartDTO> addToCart(@RequestParam Long productId, @RequestParam int quantity) throws CartNoSuchElementException {
         ProductsCartDTO currentProductCartDTO = cartService.addProductToCart(productId, quantity);
         return ResponseEntity.ok(currentProductCartDTO);
     }
-    */
-
-
-
 }

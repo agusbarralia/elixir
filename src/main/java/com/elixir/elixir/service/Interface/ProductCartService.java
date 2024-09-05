@@ -8,7 +8,7 @@ import com.elixir.elixir.entity.dto.ProductsCartDTO;
 
 public interface ProductCartService {
     
-    public ProductsCartDTO createProductCart(Long product_id, int quantity, Cart cart)
+    public ProductsCartDTO createProductCart(Long product_id, int quantity, Cart cart);
 
     public List<ProductsCartDTO> convertAllToDTO(List<ProductsCart> productsCart);
 
