@@ -22,8 +22,7 @@ public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
+    
     private Blob imageData;
     
     @ManyToOne

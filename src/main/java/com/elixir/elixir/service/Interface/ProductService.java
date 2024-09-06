@@ -29,7 +29,7 @@ public interface ProductService {
 
     public ProductDTO changeState(Long product_id) throws ProductNoSuchElementException;
 
-    public List<ProductImage> updateProductImages(Product productToUpdate, List<MultipartFile> newImages)throws IOException, SerialException, SQLException, java.io.IOException;
+    public void updateProductImages(Long productId, List<MultipartFile> imagesAdd, List<Long> ImagesRemove)throws IOException, SerialException, SQLException, java.io.IOException;
 
     public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long varietyId, Long subCategoryId, Long categoryId) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException;
 

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -101,45 +102,32 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    public void deleteProductImage(Long productId, Long imageId) throws ProductNoSuchElementException, ImageNoSuchElementException {
-        Optional<Product> productOptional = productRepository.findById(productId);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            Optional<ProductImage> imageOptional = product.getProductImages().stream()
-                    .filter(image -> image.getId().equals(imageId))
-                    .findFirst();
-            if (imageOptional.isPresent()) {
-                ProductImage imageToDelete = imageOptional.get();
-                product.getProductImages().remove(imageToDelete);
-                productRepository.save(product);
-            } else {
-                throw new ImageNoSuchElementException();
-            }
-        } else {
-            throw new ProductNoSuchElementException();
-        }
-    }
 
-    public List<ProductImage> updateProductImages(Product productToUpdate, List<MultipartFile> newImages) throws IOException, SerialException, SQLException, java.io.IOException {
-        List<ProductImage> updatedImages = new ArrayList<>();
-
-        productImageRepository.deleteByProductId(productToUpdate.getProduct_id());
-
-        for (MultipartFile image : newImages) {
+    private void addImages(Product product, List<MultipartFile> imagesAdd) throws java.io.IOException, SerialException, SQLException{
+        for (MultipartFile image : imagesAdd) {
             ProductImage productImage = new ProductImage();
-            productImage.setProduct(productToUpdate);
-            try {
-                byte[] imageBytes = image.getBytes();
-                Blob imageBlob = new SerialBlob(imageBytes);
-                productImage.setImageData(imageBlob);
-            } catch (IOException e) {
-                // Manejo de la excepción
-                throw new IOException("Error al leer la imagen", e);
-            }
-            updatedImages.add(productImage);
+            byte[] bytes = image.getBytes();
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes); 
+            productImage.setImageData(blob);
+            productImage.setProduct(product);
             productImageRepository.save(productImage);
         }
-        return updatedImages;
+    }
+    
+    private void removeImages(Product product, List<Long> imagesRemove){
+
+        for (Long imageId : imagesRemove) {
+            productImageRepository.deleteById(imageId);
+        }
+
+    }
+
+    public void updateProductImages(Long productId, List<MultipartFile> imagesAdd, List<Long> imagesRemove) throws IOException, SerialException, SQLException, java.io.IOException {
+        Product product = productRepository.findById(productId)
+                        .orElseThrow(()-> new IllegalStateException("Producto no encontrado"));
+        addImages(product,imagesAdd);
+        removeImages(product,imagesRemove);
+
     }
 
     private Map<String, Object> createProductMap(Long id,String name,String product_description,Double price, int stock,Long varietyId, Long subCategoryId, Long categoryId, Product currentProduct){
@@ -189,12 +177,9 @@ public class ProductServiceImpl implements ProductService {
                     throw new IllegalArgumentException("Campo no reconocido: " + key);
             }
         });
-    
         Product updatedProduct = productRepository.save(productToUpdate);
         return convertToDTO(updatedProduct);
     }
-        
-
     
 
     @Override
@@ -217,25 +202,14 @@ public class ProductServiceImpl implements ProductService {
         
         // Configurar las relaciones
         product.setVariety(varietyRepository.findById(varietyId).get());
-        
-
         product.setSubCategory(subCategoryRepository.findById(subCategoryId).get());
-        
         product.setCategory(categoryRepository.findById(categoryId).get());
 
 
         Product savedProduct = productRepository.save(product);
 
-        for (MultipartFile image : images) {
-            ProductImage productImage = new ProductImage();
-            byte[] bytes = image.getBytes();
-            Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes); 
-            
-            productImage.setImageData(blob);
-            productImage.setProduct(savedProduct);
-            productImageRepository.save(productImage);
-        }
-
+        addImages(savedProduct, images);
+        
         return convertToDTO(savedProduct);
     }
 
@@ -248,7 +222,7 @@ public class ProductServiceImpl implements ProductService {
                 String encodedString = Base64.getEncoder()
                     .encodeToString(image.getImageData().getBytes(1, (int) image.getImageData().length()));
 
-                return new ProductImageDTO(encodedString);
+                return new ProductImageDTO(image.getId() ,encodedString);
             } catch (SQLException e) {
                 // Manejo de la excepción
                 throw new RuntimeException("Error encoding image to base64", e);
