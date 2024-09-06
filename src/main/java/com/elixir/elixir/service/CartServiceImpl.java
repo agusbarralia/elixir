@@ -13,6 +13,7 @@ import com.elixir.elixir.entity.User;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import com.elixir.elixir.exceptions.ProductCartNoSuchElementException;
 import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.repository.ProductCartRepository;
 import com.elixir.elixir.repository.ProductRepository;
@@ -74,7 +75,7 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    public ProductsCartDTO updateProductQuantity(Long product_id, int quantity) throws CartNoSuchElementException, ProductNoSuchElementException {
+    public ProductsCartDTO updateProductQuantity(Long product_id, int quantity) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException {
         Long userId = userService.getCurrentUserId();
         Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new CartNoSuchElementException());
@@ -83,9 +84,19 @@ public class CartServiceImpl implements CartService {
                     .orElseThrow(() -> new ProductNoSuchElementException());
 
         ProductsCart productCart = productCartRepository.findByCartAndProduct(cart, product)
-                    .orElseThrow(() -> new CartNoSuchElementException());
+                    .orElseThrow(() -> new ProductCartNoSuchElementException());
+
+        if (quantity <= 0) {
+            productCartRepository.deleteById(productCart.getProductscart_id());
+            return null;
+        }
+
+        if (quantity > product.getStock()) {
+            throw new IllegalStateException("No hay suficiente stock.");
+        }
 
         productCart.setQuantity(quantity);
+        productCart.setSubtotal(productCart.getUnit_price() * quantity);
         productCartRepository.save(productCart);
 
         return productCartService.convertToDTO(productCart);

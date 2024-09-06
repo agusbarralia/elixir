@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elixir.elixir.entity.dto.CartDTO;
 import com.elixir.elixir.entity.dto.ProductsCartDTO;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
+import com.elixir.elixir.exceptions.ProductCartNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.service.Interface.CartService;
 import com.elixir.elixir.service.Interface.UserService;
@@ -37,7 +38,7 @@ public class CartController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ProductsCartDTO> updateProductQuantity(@RequestParam Long productId, @RequestParam int quantity) throws CartNoSuchElementException, ProductNoSuchElementException {
+    public ResponseEntity<ProductsCartDTO> updateProductQuantity(@RequestParam Long productId, @RequestParam int quantity) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException {
         ProductsCartDTO currentProductCartDTO = cartService.updateProductQuantity(productId, quantity);
         return ResponseEntity.ok(currentProductCartDTO);
 
