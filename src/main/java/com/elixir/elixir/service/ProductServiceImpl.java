@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
         for (MultipartFile image : imagesAdd) {
             ProductImage productImage = new ProductImage();
             byte[] bytes = image.getBytes();
-            Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes); 
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
             productImage.setImageData(blob);
             productImage.setProduct(product);
             productImageRepository.save(productImage);
@@ -115,7 +115,6 @@ public class ProductServiceImpl implements ProductService {
     }
     
     private void removeImages(Product product, List<Long> imagesRemove){
-
         for (Long imageId : imagesRemove) {
             productImageRepository.deleteById(imageId);
         }
@@ -125,9 +124,15 @@ public class ProductServiceImpl implements ProductService {
     public void updateProductImages(Long productId, List<MultipartFile> imagesAdd, List<Long> imagesRemove) throws IOException, SerialException, SQLException, java.io.IOException {
         Product product = productRepository.findById(productId)
                         .orElseThrow(()-> new IllegalStateException("Producto no encontrado"));
-        addImages(product,imagesAdd);
-        removeImages(product,imagesRemove);
+        
+        if(!imagesAdd.isEmpty()){
+            addImages(product,imagesAdd);
+        }
 
+        if (!imagesRemove.isEmpty()){
+            removeImages(product,imagesRemove);
+        }
+            
     }
 
     private Map<String, Object> createProductMap(Long id,String name,String product_description,Double price, int stock,Long varietyId, Long subCategoryId, Long categoryId, Product currentProduct){
