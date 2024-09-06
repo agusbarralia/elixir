@@ -125,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId)
                         .orElseThrow(()-> new IllegalStateException("Producto no encontrado"));
         
-        if(!imagesAdd.isEmpty()){
+        if(!imagesAdd.get(0).isEmpty()){
             addImages(product,imagesAdd);
         }
 
