@@ -78,6 +78,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         List<ProductsOrder> productsOrderList = cart.getProducts().stream().map(productsCart -> {
             ProductsOrder productsOrder = new ProductsOrder();
             productsOrder.setOrder(order);
+            productsOrder.setUnit_price(productsCart.getUnit_price());
             productsOrder.setProduct(productsCart.getProduct());
             productsOrder.setQuantity(productsCart.getQuantity());
             productsOrder.setSubtotal(productsCart.getSubtotal());

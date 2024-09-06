@@ -5,14 +5,18 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import com.elixir.elixir.entity.Cart;
+import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.dto.CartDTO;
 import com.elixir.elixir.entity.dto.ProductsCartDTO;
 import com.elixir.elixir.entity.User;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
+import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import com.elixir.elixir.exceptions.ProductCartNoSuchElementException;
 import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.repository.ProductCartRepository;
+import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.repository.UserRepository;
 import com.elixir.elixir.service.Interface.CartService;
 import com.elixir.elixir.service.Interface.ProductCartService;
@@ -36,6 +40,9 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public void createCart(User user) throws CartDuplicateException {
         Optional<Cart> cart = cartRepository.findByUserId(user.getUser_id());
@@ -68,21 +75,59 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    public void removeProductFromCart(Long product_id) throws CartNoSuchElementException {
-        Optional<ProductsCart> productCart = productCartRepository.findById(product_id);
-        if (productCart.isPresent()) {
-            productCartRepository.deleteById(product_id);
-        } else {
-            throw new CartNoSuchElementException();
+    public ProductsCartDTO updateProductQuantity(Long product_id, int quantity) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException {
+        Long userId = userService.getCurrentUserId();
+        Cart cart = cartRepository.findByUserId(userId)
+                    .orElseThrow(() -> new CartNoSuchElementException());
+
+        Product product = productRepository.findById(product_id)
+                    .orElseThrow(() -> new ProductNoSuchElementException());
+
+        ProductsCart productCart = productCartRepository.findByCartAndProduct(cart, product)
+                    .orElseThrow(() -> new ProductCartNoSuchElementException());
+
+        if (quantity <= 0) {
+            productCartRepository.deleteById(productCart.getProductscart_id());
+            return null;
         }
+
+        if (quantity > product.getStock()) {
+            throw new IllegalStateException("No hay suficiente stock.");
+        }
+
+        productCart.setQuantity(quantity);
+        productCart.setSubtotal(productCart.getUnit_price() * quantity);
+        productCartRepository.save(productCart);
+
+        return productCartService.convertToDTO(productCart);
     }
 
-    public void removeAllProductsFromCart() throws CartNoSuchElementException {
-        Optional<Cart> cart = cartRepository.findByUserId(userService.getCurrentUserId());
-        if (cart.isPresent()) {
-            productCartRepository.deleteByCartId(cart.get().getCart_id());
-        } else {
-            throw new CartNoSuchElementException();
+    public Boolean removeProductFromCart(Long product_id) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException {
+        Long userId = userService.getCurrentUserId();
+        Cart cart = cartRepository.findByUserId(userId)
+                    .orElseThrow(() -> new CartNoSuchElementException());
+
+        Product product = productRepository.findById(product_id)
+                    .orElseThrow(() -> new ProductNoSuchElementException());
+
+        ProductsCart productCart = productCartRepository.findByCartAndProduct(cart, product)
+                    .orElseThrow(() -> new ProductCartNoSuchElementException());
+
+        productCartRepository.deleteById(productCart.getProductscart_id());
+        return true;
+    }
+
+    public Boolean removeAllProductsFromCart() throws CartNoSuchElementException {
+        Long userId = userService.getCurrentUserId();
+        Cart cart = cartRepository.findByUserId(userId)
+                    .orElseThrow(() -> new CartNoSuchElementException());
+
+        if (cart.getProductsCart().isEmpty()) {
+            return false;
+        }
+        else {
+            productCartRepository.deleteByCartId(cart.getCart_id());
+            return true;
         }
     }
 
