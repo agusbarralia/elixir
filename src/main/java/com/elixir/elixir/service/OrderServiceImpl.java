@@ -13,6 +13,7 @@ import com.elixir.elixir.entity.dto.ProductsOrderDTO;
 import com.elixir.elixir.exceptions.OrderNoSuchElementException;
 import com.elixir.elixir.repository.OrderRepository;
 import com.elixir.elixir.service.Interface.OrderService;
+import com.elixir.elixir.service.Interface.UserService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -22,6 +23,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductServiceImpl productService;
+
+    @Autowired
+    private UserService userService;
 
     //CORREGIR
     @Override
@@ -33,7 +37,8 @@ public class OrderServiceImpl implements OrderService {
 
     //CORREGIR
     @Override
-    public List<OrderDTO> getOrdersByUserId(Long user_id) {
+    public List<OrderDTO> getOrdersByUserId() {
+        Long user_id = userService.getCurrentUserId();
         return orderRepository.findByUser_id(user_id).stream()
                 .map(this::convertToOrderDTO)
                 .collect(Collectors.toList());
@@ -41,12 +46,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO getOrderById(Long order_id) throws OrderNoSuchElementException {
-        Optional<Order> order = orderRepository.findById(order_id);
-        if (order.isPresent()) {
-            return convertToOrderDTO(order.get());
-        } else {
+        Long userId = userService.getCurrentUserId();
+    Optional<Order> order = orderRepository.findById(order_id);
+
+    if (order.isPresent()) {
+        Order foundOrder = order.get();
+        if (!foundOrder.getUser().getUser_id().equals(userId)) {
             throw new OrderNoSuchElementException();
         }
+        return convertToOrderDTO(foundOrder);
+    } else {
+        throw new OrderNoSuchElementException();
+    }
     }
 
     @Override
