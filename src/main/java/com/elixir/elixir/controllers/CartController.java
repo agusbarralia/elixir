@@ -6,24 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-
-import com.elixir.elixir.entity.ProductsCart;
-import com.elixir.elixir.entity.User;
-//import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.dto.CartDTO;
 import com.elixir.elixir.entity.dto.ProductsCartDTO;
-import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
+import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.service.Interface.CartService;
 import com.elixir.elixir.service.Interface.UserService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("cart")
@@ -31,9 +24,6 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public ResponseEntity<CartDTO> getCartByUserId() throws CartNoSuchElementException{
@@ -45,4 +35,34 @@ public class CartController {
         ProductsCartDTO currentProductCartDTO = cartService.addProductToCart(productId, quantity);
         return ResponseEntity.ok(currentProductCartDTO);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<ProductsCartDTO> updateProductQuantity(@RequestParam Long productId, @RequestParam int quantity) throws CartNoSuchElementException, ProductNoSuchElementException {
+        ProductsCartDTO currentProductCartDTO = cartService.updateProductQuantity(productId, quantity);
+        return ResponseEntity.ok(currentProductCartDTO);
+
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeFromCart(@RequestParam Long productId) throws CartNoSuchElementException, ProductNoSuchElementException {
+        if (cartService.removeProductFromCart(productId)){
+            return ResponseEntity.ok("El producto ha sido eliminado correctamente del carrito.");
+        }
+        else{
+            return ResponseEntity.ok("No ha sido posible eliminar el producto del carrito.");
+        }
+    }
+
+    @DeleteMapping("/removeAll")
+    public ResponseEntity<String> removeAllProductsFromCart() throws CartNoSuchElementException {
+        if (cartService.removeAllProductsFromCart()){
+            return ResponseEntity.ok("Todos los productos han sido eliminados del carrito.");
+        }
+        else{
+            return ResponseEntity.ok("No ha sido posible eliminar los productos del carrito.");
+        }
+    }
+
 }
+
+

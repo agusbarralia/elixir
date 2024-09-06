@@ -27,20 +27,30 @@ public class ProductCartServiceImpl implements ProductCartService {
 
     @Override
     public ProductsCartDTO createProductCart(Long product_id, int quantity, Cart cart) {
-        ProductsCart productsCart = new ProductsCart();
 
-        Product product = productRepository.findById(product_id)
-                    .orElseThrow(() -> new IllegalStateException("Producto no encontrado."));
-        
-        productsCart.setProduct(product);
-        productsCart.setUnit_price(product.getPrice());
-        productsCart.setSubtotal(product.getPrice() * quantity);
-        productsCart.setQuantity(quantity);
-        productsCart.setCart(cart);
-        productCartRepository.save(productsCart);
-        return convertToDTO(productsCart);
-        
+    Product product = productRepository.findById(product_id)
+                .orElseThrow(() -> new IllegalStateException("Producto no encontrado."));
+
+    ProductsCart productsCart = productCartRepository.findByCartAndProduct(cart, product)
+                .orElse(new ProductsCart());
+
+    int newQuantity = productsCart.getQuantity() + quantity;
+
+    if (newQuantity > product.getStock()) {
+        throw new IllegalStateException("No hay suficiente stock.");
     }
+
+    productsCart.setProduct(product);
+    productsCart.setCart(cart);
+    productsCart.setQuantity(newQuantity);
+    productsCart.setUnit_price(product.getPrice() * (1 - product.getDiscount()));
+    productsCart.setSubtotal(product.getPrice() * newQuantity * (1 - product.getDiscount()));
+    productsCart.setDiscount(product.getDiscount());
+
+    productCartRepository.save(productsCart);
+
+    return convertToDTO(productsCart);
+}
 
     @Override
     public List<ProductsCartDTO> convertAllToDTO(List<ProductsCart> productsCarts) {

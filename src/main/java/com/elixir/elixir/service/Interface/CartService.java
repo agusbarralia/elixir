@@ -6,6 +6,7 @@ import com.elixir.elixir.entity.dto.CartDTO;
 import com.elixir.elixir.entity.dto.ProductsCartDTO;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 import com.elixir.elixir.exceptions.CartNoSuchElementException;
+import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 
 public interface CartService {
 
@@ -15,9 +16,11 @@ public interface CartService {
     
     public ProductsCartDTO addProductToCart(Long product_id, int quantity) throws CartNoSuchElementException;
 
-    public void removeProductFromCart(Long product_id) throws CartNoSuchElementException;
+    public ProductsCartDTO updateProductQuantity(Long product_id, int quantity) throws CartNoSuchElementException, ProductNoSuchElementException;
 
-    public void removeAllProductsFromCart() throws CartNoSuchElementException;
+    public Boolean removeProductFromCart(Long product_id) throws CartNoSuchElementException, ProductNoSuchElementException;
+
+    public Boolean removeAllProductsFromCart() throws CartNoSuchElementException;
 
     public CartDTO convertToDto(Cart cart);
 

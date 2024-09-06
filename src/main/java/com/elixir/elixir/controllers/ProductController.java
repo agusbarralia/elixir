@@ -17,16 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -75,7 +71,7 @@ public class ProductController {
     }
 
     //VER QUE ONDA EL TIPO DE PETICION HTTP ?PUT?
-    @PostMapping("admin/update")
+    @PutMapping("admin/update")
     public ResponseEntity<ProductDTO> updateProduct(
             @RequestParam long id,
             @RequestParam String name,
@@ -95,8 +91,8 @@ public class ProductController {
     //Se podria cambiar la URI, a delete o algo asi (cambia el state de la entidad del product)
 
     //VER QUE ONDA EL TIPO DE PETICION HTTP ?DELETE?
-    @PostMapping("admin/changestate/{product_id}")
-    public ResponseEntity<ProductDTO> changeState(@PathVariable Long product_id) throws ProductNoSuchElementException{
+    @PutMapping("admin/changestate")
+    public ResponseEntity<ProductDTO> changeState(@RequestParam Long product_id) throws ProductNoSuchElementException{
     return ResponseEntity.ok(productService.changeState(product_id));    
     }
     
