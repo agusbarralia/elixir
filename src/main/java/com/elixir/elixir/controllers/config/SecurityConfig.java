@@ -30,30 +30,29 @@ public class SecurityConfig {
             http
                             .csrf(AbstractHttpConfigurer::disable)
                             .authorizeHttpRequests(req -> req.requestMatchers("/api/v1/auth/**").permitAll()
-                                            .requestMatchers("/error/**").permitAll()
-
-                                            .requestMatchers("/categories/**").permitAll()
+                                            // Rutas específicas para administradores
                                             .requestMatchers("/categories/admin/**").hasAnyAuthority(Role.ADMIN.name())
-
-                                            .requestMatchers("/subcategories/**").permitAll()
                                             .requestMatchers("/subcategories/admin/**").hasAnyAuthority(Role.ADMIN.name())
-
-                                            .requestMatchers("/varieties/**").permitAll()
                                             .requestMatchers("/varieties/admin/**").hasAnyAuthority(Role.ADMIN.name())
-
-                                            .requestMatchers("/products/**").permitAll()
                                             .requestMatchers("/products/admin/**").hasAnyAuthority(Role.ADMIN.name())
-                                            
-                                            //.requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
-
-                                            //.requestMatchers("/productscart/**").hasAnyAuthority(Role.USER.name())
-
-                                            //.requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
-
                                             .requestMatchers("/order/admin/**").hasAnyAuthority(Role.ADMIN.name())
-
-                                            .anyRequest()
-                                            .authenticated())
+            
+                                            // Rutas específicas para usuarios
+                                            .requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
+                                            .requestMatchers("/productscart/**").hasAnyAuthority(Role.USER.name())
+                                            .requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
+            
+                                            // Rutas públicas
+                                            .requestMatchers("/api/v1/auth/**").permitAll()
+                                            .requestMatchers("/error/**").permitAll()
+                                            .requestMatchers("/categories/**").permitAll()
+                                            .requestMatchers("/subcategories/**").permitAll()
+                                            .requestMatchers("/varieties/**").permitAll()
+                                            .requestMatchers("/products/**").permitAll()
+            
+                                            // Cualquier otra solicitud debe estar autenticada
+                                            .anyRequest().authenticated()
+                                            )
                             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                             .authenticationProvider(authenticationProvider)
                             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
