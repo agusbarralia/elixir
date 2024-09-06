@@ -45,7 +45,7 @@ public class CartController {
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<String> removeFromCart(@RequestParam Long productId) throws CartNoSuchElementException, ProductNoSuchElementException {
+    public ResponseEntity<String> removeFromCart(@RequestParam Long productId) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException {
         if (cartService.removeProductFromCart(productId)){
             return ResponseEntity.ok("El producto ha sido eliminado correctamente del carrito.");
         }
@@ -60,7 +60,7 @@ public class CartController {
             return ResponseEntity.ok("Todos los productos han sido eliminados del carrito.");
         }
         else{
-            return ResponseEntity.ok("No ha sido posible eliminar los productos del carrito.");
+            return ResponseEntity.ok("El carrito ya esta vacio.");
         }
     }
 

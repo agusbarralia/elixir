@@ -19,7 +19,7 @@ public interface CartService {
 
     public ProductsCartDTO updateProductQuantity(Long product_id, int quantity) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException;
 
-    public Boolean removeProductFromCart(Long product_id) throws CartNoSuchElementException, ProductNoSuchElementException;
+    public Boolean removeProductFromCart(Long product_id) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException;
 
     public Boolean removeAllProductsFromCart() throws CartNoSuchElementException;
 

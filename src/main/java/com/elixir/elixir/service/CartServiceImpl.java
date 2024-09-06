@@ -102,7 +102,7 @@ public class CartServiceImpl implements CartService {
         return productCartService.convertToDTO(productCart);
     }
 
-    public Boolean removeProductFromCart(Long product_id) throws CartNoSuchElementException, ProductNoSuchElementException {
+    public Boolean removeProductFromCart(Long product_id) throws CartNoSuchElementException, ProductNoSuchElementException, ProductCartNoSuchElementException {
         Long userId = userService.getCurrentUserId();
         Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new CartNoSuchElementException());
@@ -111,7 +111,7 @@ public class CartServiceImpl implements CartService {
                     .orElseThrow(() -> new ProductNoSuchElementException());
 
         ProductsCart productCart = productCartRepository.findByCartAndProduct(cart, product)
-                    .orElseThrow(() -> new CartNoSuchElementException());
+                    .orElseThrow(() -> new ProductCartNoSuchElementException());
 
         productCartRepository.deleteById(productCart.getProductscart_id());
         return true;
@@ -121,9 +121,14 @@ public class CartServiceImpl implements CartService {
         Long userId = userService.getCurrentUserId();
         Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new CartNoSuchElementException());
-    
-        productCartRepository.deleteByCartId(cart.getCart_id());
-        return true;
+
+        if (cart.getProductsCart().isEmpty()) {
+            return false;
+        }
+        else {
+            productCartRepository.deleteByCartId(cart.getCart_id());
+            return true;
+        }
     }
 
     public CartDTO convertToDto(Cart cart) {
