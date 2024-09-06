@@ -10,7 +10,7 @@ public interface OrderService {
 
     public List<OrderDTO> getOrders();
 
-    public List<OrderDTO> getOrdersByUserId(Long user_id);
+    public List<OrderDTO> getOrdersByUserId();
 
     public OrderDTO getOrderById(Long order_id) throws OrderNoSuchElementException;
 

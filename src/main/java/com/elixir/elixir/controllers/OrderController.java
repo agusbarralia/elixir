@@ -12,11 +12,12 @@ import com.elixir.elixir.service.Interface.OrderService;
 import com.elixir.elixir.service.Interface.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("order")
+@RequestMapping("orders")
 public class OrderController {
 
     @Autowired
@@ -32,14 +33,11 @@ public class OrderController {
 
     @GetMapping
     public List<OrderDTO> getOrdersByUserId() {
-        //obtengo el id
-        Long userId = userService.getCurrentUserId();
-
-        return orderService.getOrdersByUserId(userId);
+        return orderService.getOrdersByUserId();
     }
     
-    @GetMapping("/order_id")
-    public ResponseEntity<OrderDTO> getOrderById(@RequestParam Long order_id) throws OrderNoSuchElementException {
+    @GetMapping("/order/{order_id}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long order_id) throws OrderNoSuchElementException {
         return ResponseEntity.ok(orderService.getOrderById(order_id));
     }
 
