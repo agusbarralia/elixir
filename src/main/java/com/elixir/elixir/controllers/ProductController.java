@@ -71,7 +71,7 @@ public class ProductController {
     }
 
     //VER QUE ONDA EL TIPO DE PETICION HTTP ?PUT?
-    @PutMapping("admin/update")
+    @PutMapping("admin/update/values")
     public ResponseEntity<ProductDTO> updateProduct(
             @RequestParam long id,
             @RequestParam String name,
@@ -80,12 +80,21 @@ public class ProductController {
             @RequestParam int stock,
             @RequestParam Long varietyId,
             @RequestParam Long subCategoryId,
-            @RequestParam Long categoryId,
-            @RequestParam(value = "images", required = false) List<MultipartFile> images) 
+            @RequestParam Long categoryId)
             throws ProductNoSuchElementException, java.io.IOException, SQLException {
 
-        ProductDTO result = productService.updateProduct(id,name, product_description, price,stock, varietyId, subCategoryId, categoryId, images);
+        ProductDTO result = productService.updateProduct(id,name, product_description, price,stock, varietyId, subCategoryId, categoryId);
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
+    }
+
+    @PutMapping("admin/update/images")
+    public ResponseEntity<String> updateProductImages(
+        @RequestParam Long productId, 
+        @RequestParam(value = "imagesAdd", required = false) List<MultipartFile> imagesAdd,
+        @RequestParam(value = "imagesRemove", required = false) List<Long> imagesRemove)
+            throws ProductNoSuchElementException, java.io.IOException, SQLException {
+        productService.updateProductImages(productId,imagesAdd,imagesRemove);
+        return ResponseEntity.ok("Imagenes actualizadas correctamente");
     }
 
     //Se podria cambiar la URI, a delete o algo asi (cambia el state de la entidad del product)
