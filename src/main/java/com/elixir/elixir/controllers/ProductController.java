@@ -80,11 +80,10 @@ public class ProductController {
             @RequestParam int stock,
             @RequestParam Long varietyId,
             @RequestParam Long subCategoryId,
-            @RequestParam Long categoryId,
-            @RequestParam(value = "images", required = false) List<MultipartFile> images) 
+            @RequestParam Long categoryId)
             throws ProductNoSuchElementException, java.io.IOException, SQLException {
 
-        ProductDTO result = productService.updateProduct(id,name, product_description, price,stock, varietyId, subCategoryId, categoryId, images);
+        ProductDTO result = productService.updateProduct(id,name, product_description, price,stock, varietyId, subCategoryId, categoryId);
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
     }
 

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,28 +142,60 @@ public class ProductServiceImpl implements ProductService {
         return updatedImages;
     }
 
-    @Override
-    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long varietyId, Long subCategoryId, Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException {
-        Optional<Product> oldProduct = productRepository.findById(id);
-        if (oldProduct.isPresent()) {
-            Product productToUpdate = oldProduct.get();
-            System.out.println(newImages);
-            List<ProductImage> imagesUpdate = updateProductImages(productToUpdate, newImages);
-            productToUpdate.setName(name);
-            productToUpdate.setProduct_description(product_description);
-            productToUpdate.setPrice(price);
-            productToUpdate.setStock(stock);
-            productToUpdate.setVariety(varietyRepository.findById(varietyId).get());
-            productToUpdate.setSubCategory(subCategoryRepository.findById(subCategoryId).get());
-            productToUpdate.setCategory(categoryRepository.findById(categoryId).get());
-            productToUpdate.setProductImages(imagesUpdate);
-            Product updatedProduct = productRepository.save(productToUpdate);
-            return convertToDTO(updatedProduct);
-            // Actualizar las imágenes del producto
-        } else {
-            throw new ProductNoSuchElementException();
-        }
+    private Map<String, Object> createProductMap(Long id,String name,String product_description,Double price, int stock,Long varietyId, Long subCategoryId, Long categoryId, Product currentProduct){
+        
+        Map<String, Object> updates = new HashMap<>();
+        if (!name.equals(currentProduct.getName())) updates.put("name", name);
+        if (!product_description.equals(currentProduct.getProduct_description())) updates.put("product_description", product_description);
+        if (!price.equals(currentProduct.getPrice())) updates.put("price", price);
+        if (stock != currentProduct.getStock()) updates.put("stock", stock);
+        if (!varietyId.equals(currentProduct.getVariety().getVariety_id())) updates.put("VarietyId", varietyId);
+        if (!subCategoryId.equals(currentProduct.getSubCategory().getSubcategory_id())) updates.put("subCategoryId", subCategoryId);
+        if (!categoryId.equals(currentProduct.getCategory().getCategory_id())) updates.put("categoryId", categoryId);
+        
+        return updates;
     }
+
+    @Override
+    public ProductDTO updateProduct(Long id,String name,String product_description,Double price, int stock,Long varietyId, Long subCategoryId, Long categoryId) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException {
+
+        Product productToUpdate = productRepository.findById(id).orElseThrow(() -> new IllegalStateException("Producto no encontrado."));
+        Map<String, Object> updates = createProductMap(id, name, product_description, price,stock, varietyId, subCategoryId, categoryId, productToUpdate);
+        
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "name":
+                    productToUpdate.setName((String) value);
+                    break;
+                case "product_description":
+                    productToUpdate.setProduct_description((String) value);
+                    break;
+                case "price":
+                    productToUpdate.setPrice((Double) value);
+                    break;
+                case "stock":
+                    productToUpdate.setStock((Integer) value);
+                    break;
+                case "varietyId":
+                    productToUpdate.setVariety(varietyRepository.findById((Long) value).orElse(null));
+                    break;
+                case "subCategoryId":
+                    productToUpdate.setSubCategory(subCategoryRepository.findById((Long) value).orElse(null));
+                    break;
+                case "categoryId":
+                    productToUpdate.setCategory(categoryRepository.findById((Long) value).orElse(null));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Campo no reconocido: " + key);
+            }
+        });
+    
+        Product updatedProduct = productRepository.save(productToUpdate);
+        return convertToDTO(updatedProduct);
+    }
+        
+
+    
 
     @Override
     public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SerialException, SQLException  {
@@ -248,5 +282,5 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
+    
 }

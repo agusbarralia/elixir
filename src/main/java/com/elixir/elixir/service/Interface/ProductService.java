@@ -13,7 +13,7 @@ import java.sql.SQLException;
 //import io.jsonwebtoken.io.IOException;
 
 import java.util.List;
-
+import java.util.Map;
 import javax.sql.rowset.serial.SerialException;
 
 
@@ -31,9 +31,11 @@ public interface ProductService {
 
     public List<ProductImage> updateProductImages(Product productToUpdate, List<MultipartFile> newImages)throws IOException, SerialException, SQLException, java.io.IOException;
 
-    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long varietyId, Long subCategoryId, Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException;
+    public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long varietyId, Long subCategoryId, Long categoryId) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException;
 
-    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SQLException;
+    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, java.io.IOException, SQLException;
     
     public void updateProductDiscount(Long productId, float discount);
+
+
 }
