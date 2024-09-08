@@ -2,6 +2,7 @@ package com.elixir.elixir.service.Interface;
 import java.util.List;
 
 import com.elixir.elixir.entity.Cart;
+import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.dto.ProductsCartDTO;
 
@@ -13,4 +14,7 @@ public interface ProductCartService {
     public List<ProductsCartDTO> convertAllToDTO(List<ProductsCart> productsCart);
 
     public ProductsCartDTO convertToDTO(ProductsCart productsCart);
+
+    public void updateProductCart(ProductsCart productsCart, Product product);
+
 }

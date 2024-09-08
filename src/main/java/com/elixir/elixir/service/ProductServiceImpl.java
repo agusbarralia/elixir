@@ -18,6 +18,7 @@ import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.entity.Variety;
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductImage;
+import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.entity.dto.ProductDTO;
 import com.elixir.elixir.entity.dto.ProductImageDTO;
@@ -31,7 +32,8 @@ import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.repository.SubCategoryRepository;
 import com.elixir.elixir.repository.VarietyRepository;
 import com.elixir.elixir.repository.CategoryRepository;
-
+import com.elixir.elixir.service.Interface.CartService;
+import com.elixir.elixir.service.Interface.ProductCartService;
 import com.elixir.elixir.service.Interface.ProductService;
 import javax.sql.rowset.serial.SerialBlob;
 
@@ -60,6 +62,9 @@ public class ProductServiceImpl implements ProductService {
     
     @Autowired
     private ProductImageRepository productImageRepository;
+
+    @Autowired
+    private ProductCartService productCartService;
 
     @Override
     public List<ProductDTO> getProducts() {
@@ -151,7 +156,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(Long id,String name,String product_description,Double price, int stock,Long varietyId, Long subCategoryId, Long categoryId) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException {
-
         Product productToUpdate = productRepository.findById(id).orElseThrow(() -> new IllegalStateException("Producto no encontrado."));
         Map<String, Object> updates = createProductMap(id, name, product_description, price,stock, varietyId, subCategoryId, categoryId, productToUpdate);
         
@@ -183,13 +187,16 @@ public class ProductServiceImpl implements ProductService {
             }
         });
         Product updatedProduct = productRepository.save(productToUpdate);
+
+        if (updates.containsKey("price")) {
+            updateProductCart(productToUpdate);         //Si el precio cambio actualizo todos los carritos que tengan ese producto
+        }
         return convertToDTO(updatedProduct);
     }
     
 
     @Override
     public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SerialException, SQLException  {
-        
         Optional<Product> existingProduct = productRepository.findByName(name);
         
         if (existingProduct.isPresent()) {
@@ -250,14 +257,21 @@ public class ProductServiceImpl implements ProductService {
         return productDTO;
     }
 
-    
     public void updateProductDiscount(Long productId, float discount){
-
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
-
         product.setDiscount(discount);
         productRepository.save(product);
+        updateProductCart(product);
+    }
+
+
+    private void updateProductCart(Product product){
+        //Product product = productRepository.findById(productId)
+        //                    .orElseThrow(()-> new IllegalStateException("Producto no encontrado"));
+        List<ProductsCart> productsCarts= product.getProductsCarts();
+        productsCarts.forEach(productsCart -> productCartService.updateProductCart(productsCart, product));
+
     }
 
 

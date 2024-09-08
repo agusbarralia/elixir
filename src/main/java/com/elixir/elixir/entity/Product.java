@@ -46,7 +46,6 @@ public class Product {
     @Column
     private float discount;
     
-
     @ManyToOne
     @JoinColumn(name = "variety_id", referencedColumnName = "variety_id")
     private Variety variety;
@@ -62,11 +61,12 @@ public class Product {
     @OneToMany(mappedBy ="product")
     private List<ProductImage> productImages;
 
+    @OneToMany(mappedBy = "product")
+    private List<ProductsCart> productsCarts;
 
     public boolean getState() {
         return state;
     }
-
     public void setState(boolean newState) {
         this.state = newState;
     }

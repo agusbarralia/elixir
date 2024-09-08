@@ -28,28 +28,28 @@ public class ProductCartServiceImpl implements ProductCartService {
     @Override
     public ProductsCartDTO createProductCart(Long product_id, int quantity, Cart cart) {
 
-    Product product = productRepository.findById(product_id)
+        Product product = productRepository.findById(product_id)
                 .orElseThrow(() -> new IllegalStateException("Producto no encontrado."));
 
-    ProductsCart productsCart = productCartRepository.findByCartAndProduct(cart, product)
+        ProductsCart productsCart = productCartRepository.findByCartAndProduct(cart, product)
                 .orElse(new ProductsCart());
 
-    int newQuantity = productsCart.getQuantity() + quantity;
+        int newQuantity = productsCart.getQuantity() + quantity;
 
-    if (newQuantity > product.getStock()) {
-        throw new IllegalStateException("No hay suficiente stock.");
-    }
+        if (newQuantity > product.getStock()) {
+            throw new IllegalStateException("No hay suficiente stock.");
+        }
 
-    productsCart.setProduct(product);
-    productsCart.setCart(cart);
-    productsCart.setQuantity(newQuantity);
-    productsCart.setUnit_price(product.getPrice() * (1 - product.getDiscount()));
-    productsCart.setSubtotal(product.getPrice() * newQuantity * (1 - product.getDiscount()));
-    productsCart.setDiscount(product.getDiscount());
+        productsCart.setProduct(product);
+        productsCart.setCart(cart);
+        productsCart.setQuantity(newQuantity);
+        productsCart.setUnit_price(product.getPrice() * (1 - product.getDiscount()));
+        productsCart.setSubtotal(product.getPrice() * newQuantity * (1 - product.getDiscount()));
+        productsCart.setDiscount(product.getDiscount());
     
-    productCartRepository.save(productsCart);
+        productCartRepository.save(productsCart);
 
-    return convertToDTO(productsCart);
+        return convertToDTO(productsCart);
 }
 
     @Override
@@ -60,6 +60,13 @@ public class ProductCartServiceImpl implements ProductCartService {
                             .collect(Collectors.toList());    
         }
         return Collections.emptyList();
+    }
+
+    public void updateProductCart(ProductsCart productsCart, Product product){
+        productsCart.setUnit_price(product.getPrice() * (1 - product.getDiscount()));
+        productsCart.setSubtotal(product.getPrice() * productsCart.getQuantity() * (1 - product.getDiscount()));
+        productsCart.setDiscount(product.getDiscount());
+        productCartRepository.save(productsCart);
     }
 
     public ProductsCartDTO convertToDTO(ProductsCart productsCart) {
