@@ -10,6 +10,7 @@ import com.elixir.elixir.entity.Variety;
 import com.elixir.elixir.exceptions.VarietyDuplicateException;
 import com.elixir.elixir.exceptions.VarietyNoSuchElementException;
 import com.elixir.elixir.repository.VarietyRepository;
+import com.elixir.elixir.service.Interface.ProductService;
 import com.elixir.elixir.service.Interface.VarietyService;
 
 @Service
@@ -17,6 +18,9 @@ public class VarietyServiceImpl implements VarietyService{
 
     @Autowired
     private VarietyRepository VarietyRepository;
+
+    @Autowired
+    private ProductService productService;
 
     public List<Variety> getVarieties(){
         return VarietyRepository.findAll();
@@ -38,6 +42,16 @@ public class VarietyServiceImpl implements VarietyService{
         throw new VarietyDuplicateException();
         }
 
-
+    public Variety deleteVariety(Long varietyId) throws VarietyNoSuchElementException {
+        Optional<Variety> variety = VarietyRepository.findById(varietyId);
+        if (variety.isPresent()) {
+            variety.get().setState(false);
+            VarietyRepository.save(variety.get());
+            productService.deleteProductByVariety(varietyId); // Asegúrate de tener este método en ProductService
+            return variety.get();
+        } else {
+            throw new VarietyNoSuchElementException();
+        }
+    }
 }
 

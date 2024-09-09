@@ -24,12 +24,12 @@ public class SubCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long subcategory_id;
+    @Column(name = "subcategory_id")
+    private Long subCategory_id;
 
     @Column
     private String name;
 
-    //@OneToMany(mappedBy = "subCategory")
-    //private List<Product> products;
-    
+    @Column(columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean state = true;
 }

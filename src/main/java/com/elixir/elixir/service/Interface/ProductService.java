@@ -37,5 +37,10 @@ public interface ProductService {
     
     public void updateProductDiscount(Long productId, float discount);
 
+    public void deleteProductByCategory(Long categoryId);
+
+    public void deleteProductBySubCategory(Long subCategoryId);
+
+    public void deleteProductByVariety(Long varietyId);
 
 }

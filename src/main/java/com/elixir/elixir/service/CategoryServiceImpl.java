@@ -10,9 +10,12 @@ import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.repository.CategoryRepository;
 import com.elixir.elixir.service.Interface.CategoryService;
+import com.elixir.elixir.service.Interface.ProductService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+    @Autowired
+    private ProductService productService;
     
     @Autowired
     private CategoryRepository categoryRepository;
@@ -36,4 +39,16 @@ public class CategoryServiceImpl implements CategoryService {
             return categoryRepository.save(new Category(category_name));
         throw new CategoryDuplicateException();
         }
+
+    public Category deleteCategory(Long categoryId) throws CategoryNoSuchElementException{
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if (category.isPresent()) {
+            category.get().setState(false);
+            categoryRepository.save(category.get());
+            productService.deleteProductByCategory(categoryId);
+            return category.get();
+        } else {
+            throw new CategoryNoSuchElementException();
+        }
+    }
 }

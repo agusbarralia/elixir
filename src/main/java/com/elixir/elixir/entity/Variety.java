@@ -1,5 +1,7 @@
 package com.elixir.elixir.entity;
 
+import jakarta.persistence.Column;
+
 //import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -25,6 +27,9 @@ public class Variety {
     private Long variety_id;
 
     private String name;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean state = true;
 
     //@OneToMany(mappedBy = "label")
     //private List<Product> products;

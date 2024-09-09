@@ -148,7 +148,7 @@ public class ProductServiceImpl implements ProductService {
         if (!price.equals(currentProduct.getPrice())) updates.put("price", price);
         if (stock != currentProduct.getStock()) updates.put("stock", stock);
         if (!varietyId.equals(currentProduct.getVariety().getVariety_id())) updates.put("VarietyId", varietyId);
-        if (!subCategoryId.equals(currentProduct.getSubCategory().getSubcategory_id())) updates.put("subCategoryId", subCategoryId);
+        if (!subCategoryId.equals(currentProduct.getSubCategory().getSubCategory_id())) updates.put("subCategoryId", subCategoryId);
         if (!categoryId.equals(currentProduct.getCategory().getCategory_id())) updates.put("categoryId", categoryId);
         
         return updates;
@@ -250,7 +250,7 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setDatePublished(product.getDate_published());
         productDTO.setState(product.getState());
         productDTO.setVarietyId(product.getVariety() != null ? product.getVariety().getVariety_id() : null);
-        productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubcategory_id() : null);
+        productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubCategory_id() : null);
         productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
         productDTO.setImagesList(imageDTOs);
         productDTO.setDiscount(product.getDiscount());
@@ -274,6 +274,27 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    public void deleteProductByCategory(Long categoyId){
+        List<Product> products = productRepository.findByCategory(categoyId);
+        products.forEach(product -> {
+            product.setState(false);
+            productRepository.save(product);
+        });
+    }
 
+    public void deleteProductBySubCategory(Long subCategoryId){
+        List<Product> products = productRepository.findBySubCategory(subCategoryId);
+        products.forEach(product -> {
+            product.setState(false);
+            productRepository.save(product);
+        });
+    }
     
+    public void deleteProductByVariety(Long varietyId){
+        List<Product> products = productRepository.findByVariety(varietyId);
+        products.forEach(product -> {
+            product.setState(false);
+            productRepository.save(product);
+        });
+    }
 }

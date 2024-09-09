@@ -13,6 +13,7 @@ import com.elixir.elixir.exceptions.VarietyDuplicateException;
 import com.elixir.elixir.exceptions.VarietyNoSuchElementException;
 import com.elixir.elixir.service.Interface.VarietyService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,11 @@ public class VarietyController {
             Variety result = varietyService.createVariety(variety_name);
             return ResponseEntity.created(URI.create("/varieties/" + result.getVariety_id())).body(result);
         }
-    }   
-    
-    
+
+    @DeleteMapping("/admin/{varietyId}")
+    public ResponseEntity<Variety> deleteVariety(@PathVariable Long varietyId)
+        throws VarietyNoSuchElementException{
+            Variety result = varietyService.deleteVariety(varietyId);
+            return ResponseEntity.ok(result);
+        }
+    }

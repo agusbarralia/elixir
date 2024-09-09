@@ -15,6 +15,8 @@ public interface VarietyService {
     public Optional<Variety> getVarietyByName(String variety_name) throws VarietyNoSuchElementException;
 
     public Variety createVariety(String variety_name) throws VarietyDuplicateException;
+
+    public Variety deleteVariety(Long varietyId) throws VarietyNoSuchElementException;
 }
 
 
