@@ -23,7 +23,7 @@ public class VarietyServiceImpl implements VarietyService{
     private ProductService productService;
 
     public List<Variety> getVarieties(){
-        return VarietyRepository.findAll();
+        return VarietyRepository.findAllWithStateTrue();
     }
 
     public Optional<Variety> getVarietyByName(String variety_name) throws VarietyNoSuchElementException {

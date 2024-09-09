@@ -9,8 +9,6 @@ import com.elixir.elixir.exceptions.CategoryDuplicateException;
 import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.service.Interface.CategoryService;
 
-import lombok.Delegate;
-
 import java.net.URI;
 import java.util.List;
 

@@ -21,12 +21,12 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     public List<Category> getCategories(){
-        return categoryRepository.findAll();
+        return categoryRepository.findAllWithStateTrue();
     }
 
     public Optional<Category> getCategoryByName(String category_name) throws CategoryNoSuchElementException {
         Optional<Category> category = categoryRepository.findByName(category_name);
-        if (category.isPresent()) {
+        if (category.isPresent() && category.get().getState()) {
             return category;
         } else {
             throw new CategoryNoSuchElementException();

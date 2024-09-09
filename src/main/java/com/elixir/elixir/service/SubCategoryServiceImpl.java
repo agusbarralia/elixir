@@ -6,9 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.entity.SubCategory;
-import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.exceptions.SubCategoryDuplicateException;
 import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
 import com.elixir.elixir.repository.SubCategoryRepository;
@@ -24,7 +22,7 @@ public class SubCategoryServiceImpl implements SubCategoryService{
     private ProductService productService;
 
     public List<SubCategory> getSubCategories(){
-        return SubCategoryRepository.findAll();
+        return SubCategoryRepository.findAllWithStateTrue();
     }
 
     public Optional<SubCategory> getSubCategoryByName(String subcategory_name) throws SubCategoryNoSuchElementException {

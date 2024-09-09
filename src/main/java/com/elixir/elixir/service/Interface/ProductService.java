@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.ProductImage;
 import com.elixir.elixir.entity.dto.ProductDTO;
+import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
+import com.elixir.elixir.exceptions.VarietyNoSuchElementException;
 
 import io.jsonwebtoken.io.IOException;
 
@@ -33,7 +36,7 @@ public interface ProductService {
 
     public ProductDTO updateProduct(Long id, String name, String product_description, Double price, int stock, Long varietyId, Long subCategoryId, Long categoryId) throws ProductNoSuchElementException, IOException, SerialException, SQLException, java.io.IOException;
 
-    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, java.io.IOException, SQLException;
+    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> newImages) throws ProductNoSuchElementException, java.io.IOException, SQLException, VarietyNoSuchElementException, CategoryNoSuchElementException, SubCategoryNoSuchElementException;
     
     public void updateProductDiscount(Long productId, float discount);
 

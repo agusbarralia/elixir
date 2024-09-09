@@ -1,7 +1,7 @@
 package com.elixir.elixir.service.Interface;
 
 import java.util.List;
-import java.util.Optional; 
+import java.util.Optional;
 import com.elixir.elixir.entity.Variety;
 import com.elixir.elixir.exceptions.VarietyDuplicateException;
 import com.elixir.elixir.exceptions.VarietyNoSuchElementException;

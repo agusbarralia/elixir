@@ -12,7 +12,6 @@ import com.elixir.elixir.exceptions.CartNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductCartNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.service.Interface.CartService;
-import com.elixir.elixir.service.Interface.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

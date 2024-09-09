@@ -17,7 +17,6 @@ import com.elixir.elixir.exceptions.ProductCartNoSuchElementException;
 import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.repository.ProductCartRepository;
 import com.elixir.elixir.repository.ProductRepository;
-import com.elixir.elixir.repository.UserRepository;
 import com.elixir.elixir.service.Interface.CartService;
 import com.elixir.elixir.service.Interface.ProductCartService;
 import com.elixir.elixir.service.Interface.UserService;
@@ -28,9 +27,6 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartRepository cartRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private ProductCartService productCartService;
@@ -67,6 +63,9 @@ public class CartServiceImpl implements CartService {
     public ProductsCartDTO addProductToCart(Long product_id, int quantity) throws CartNoSuchElementException {
         Optional<Cart> cart = cartRepository.findByUserId(userService.getCurrentUserId());
         if (cart.isPresent()) {
+            if (quantity <= 0) {
+                throw new IllegalStateException("La cantidad debe ser mayor a 0.");
+            }
             ProductsCartDTO productsCartDTO = productCartService.createProductCart(product_id, quantity, cart.get());
             return productsCartDTO;
         }

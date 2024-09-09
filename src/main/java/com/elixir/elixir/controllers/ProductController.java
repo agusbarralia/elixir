@@ -2,7 +2,10 @@ package com.elixir.elixir.controllers;
 
 //import com.elixir.elixir.entity.Product;
 import com.elixir.elixir.entity.dto.ProductDTO;
+import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
+import com.elixir.elixir.exceptions.VarietyNoSuchElementException;
 import com.elixir.elixir.service.Interface.ProductService;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -61,7 +64,7 @@ public class ProductController {
             @RequestParam Long subCategoryId,
             @RequestParam Long categoryId,
             @RequestParam(value = "images", required = false) List<MultipartFile> images) 
-            throws ProductNoSuchElementException, java.io.IOException, SQLException {
+            throws ProductNoSuchElementException, java.io.IOException, SQLException, VarietyNoSuchElementException, CategoryNoSuchElementException, SubCategoryNoSuchElementException {
 
         // Llamar al servicio para crear el producto
         ProductDTO result = productService.createProduct(name, product_description, price,stock, date_published, state, varietyId, subCategoryId, categoryId, images);
@@ -107,7 +110,7 @@ public class ProductController {
     
     @PutMapping("admin/update/discount")
     public ResponseEntity<String> updateDiscount(@RequestParam("product_id") Long productId, @RequestParam("discount") float discount) {
-          try {
+        try {
             if(discount >= 0 && discount <= 0.8){ //Nosotros lo seteamos asi
                 productService.updateProductDiscount(productId, discount);
                 return ResponseEntity.ok("El descuento se aplico exitosamente!");
@@ -116,8 +119,8 @@ public class ProductController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Error al actualizar el descuento: " + e.getMessage());
+                                .body("Error al actualizar el descuento: " + e.getMessage());
         }
     }
 }
-   
+
