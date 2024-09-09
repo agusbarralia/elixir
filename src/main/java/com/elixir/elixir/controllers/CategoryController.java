@@ -12,6 +12,7 @@ import com.elixir.elixir.service.Interface.CategoryService;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +41,11 @@ public class CategoryController {
             Category result = categoryService.createCategory(category_name);
             return ResponseEntity.created(URI.create("/categories/" + result.getCategory_id())).body(result);
         }
-    }   
-    
-    
-    
+
+    @DeleteMapping("/admin/{categoryId}")
+    public ResponseEntity<Category> deleteCategory(@PathVariable Long categoryId)
+        throws CategoryNoSuchElementException{
+            Category result = categoryService.deleteCategory(categoryId);
+            return ResponseEntity.ok(result);
+        }
+}

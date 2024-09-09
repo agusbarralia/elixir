@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.elixir.elixir.entity.Cart;
 import com.elixir.elixir.entity.Order;
 import com.elixir.elixir.entity.ProductsOrder;
-import com.elixir.elixir.entity.User;
 import com.elixir.elixir.entity.dto.OrderDTO;
 import com.elixir.elixir.repository.CartRepository;
 import com.elixir.elixir.repository.OrderRepository;
@@ -18,7 +17,6 @@ import com.elixir.elixir.repository.OrderStateRepository;
 import com.elixir.elixir.repository.ProductCartRepository;
 import com.elixir.elixir.repository.ProductsOrderRepository;
 import com.elixir.elixir.service.Interface.CheckoutService;
-import com.elixir.elixir.service.Interface.OrderService;
 import com.elixir.elixir.service.Interface.UserService;
 
 @Service

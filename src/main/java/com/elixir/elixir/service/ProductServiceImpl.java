@@ -1,13 +1,11 @@
 package com.elixir.elixir.service;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,20 +20,17 @@ import com.elixir.elixir.entity.ProductsCart;
 import com.elixir.elixir.entity.SubCategory;
 import com.elixir.elixir.entity.dto.ProductDTO;
 import com.elixir.elixir.entity.dto.ProductImageDTO;
-import com.elixir.elixir.exceptions.ImageNoSuchElementException;
-//import com.elixir.elixir.entity.SubCategory;
+import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
+import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
+import com.elixir.elixir.exceptions.VarietyNoSuchElementException;
 import com.elixir.elixir.repository.CategoryRepository;
 import com.elixir.elixir.repository.VarietyRepository;
 import com.elixir.elixir.repository.ProductImageRepository;
 import com.elixir.elixir.repository.ProductRepository;
 import com.elixir.elixir.repository.SubCategoryRepository;
-import com.elixir.elixir.repository.VarietyRepository;
-import com.elixir.elixir.repository.CategoryRepository;
-import com.elixir.elixir.service.Interface.CartService;
 import com.elixir.elixir.service.Interface.ProductCartService;
 import com.elixir.elixir.service.Interface.ProductService;
-import javax.sql.rowset.serial.SerialBlob;
 
 import io.jsonwebtoken.io.IOException;
 
@@ -70,14 +65,15 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream()
-                    .map(this::convertToDTO)  // Convierte cada Product a ProductDTO
-                    .collect(Collectors.toList());
+                .filter(Product::getState)  // Filtra productos cuyo estado sea true
+                .map(this::convertToDTO)  // Convierte cada Product a ProductDTO
+                .collect(Collectors.toList());
     }
 
     @Override
     public ProductDTO getProductById(Long id) throws ProductNoSuchElementException {
         Optional<Product> product = productRepository.findById(id);
-        if (product.isPresent()) {
+        if (product.isPresent() && product.get().getState()) {
             return convertToDTO(product.get());
         } else {
             throw new ProductNoSuchElementException();
@@ -87,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProductByName(String name) throws ProductNoSuchElementException {
         Optional<Product> product = productRepository.findByName(name);
-        if (product.isPresent()) {
+        if (product.isPresent() && product.get().getState()) {
             return convertToDTO(product.get());
         } else {
             throw new ProductNoSuchElementException();
@@ -148,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
         if (!price.equals(currentProduct.getPrice())) updates.put("price", price);
         if (stock != currentProduct.getStock()) updates.put("stock", stock);
         if (!varietyId.equals(currentProduct.getVariety().getVariety_id())) updates.put("VarietyId", varietyId);
-        if (!subCategoryId.equals(currentProduct.getSubCategory().getSubcategory_id())) updates.put("subCategoryId", subCategoryId);
+        if (!subCategoryId.equals(currentProduct.getSubCategory().getSubCategory_id())) updates.put("subCategoryId", subCategoryId);
         if (!categoryId.equals(currentProduct.getCategory().getCategory_id())) updates.put("categoryId", categoryId);
         
         return updates;
@@ -189,14 +185,14 @@ public class ProductServiceImpl implements ProductService {
         Product updatedProduct = productRepository.save(productToUpdate);
 
         if (updates.containsKey("price")) {
-            updateProductCart(productToUpdate);         //Si el precio cambio actualizo todos los carritos que tengan ese producto
+            updateProductCart(productToUpdate);//Si el precio cambio actualizo todos los carritos que tengan ese producto
         }
         return convertToDTO(updatedProduct);
     }
     
 
     @Override
-    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SerialException, SQLException  {
+    public ProductDTO createProduct(String name, String product_description, Double price, int stock,LocalDateTime date_published, boolean state,Long varietyId, Long subCategoryId,Long categoryId, List<MultipartFile> images) throws ProductNoSuchElementException, java.io.IOException, SerialException, SQLException, VarietyNoSuchElementException, CategoryNoSuchElementException, SubCategoryNoSuchElementException {
         Optional<Product> existingProduct = productRepository.findByName(name);
         
         if (existingProduct.isPresent()) {
@@ -211,12 +207,29 @@ public class ProductServiceImpl implements ProductService {
         product.setDate_published(date_published);
         product.setState(state);
         product.setDiscount(0);
-        
+
+        Variety variety = varietyRepository.findById(varietyId)
+                        .orElseThrow(() -> new VarietyNoSuchElementException());
+        if (!variety.getState()) {
+            throw new VarietyNoSuchElementException();
+        }
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNoSuchElementException());
+        if (!category.getState()) {
+            throw new CategoryNoSuchElementException();
+        }
+
+        SubCategory subCategory = subCategoryRepository.findById(subCategoryId)
+                .orElseThrow(() -> new SubCategoryNoSuchElementException());
+        if (!subCategory.getState()) {
+            throw new SubCategoryNoSuchElementException();
+        }
+
         // Configurar las relaciones
         product.setVariety(varietyRepository.findById(varietyId).get());
         product.setSubCategory(subCategoryRepository.findById(subCategoryId).get());
         product.setCategory(categoryRepository.findById(categoryId).get());
-
 
         Product savedProduct = productRepository.save(product);
 
@@ -250,7 +263,7 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setDatePublished(product.getDate_published());
         productDTO.setState(product.getState());
         productDTO.setVarietyId(product.getVariety() != null ? product.getVariety().getVariety_id() : null);
-        productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubcategory_id() : null);
+        productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubCategory_id() : null);
         productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
         productDTO.setImagesList(imageDTOs);
         productDTO.setDiscount(product.getDiscount());
@@ -274,6 +287,27 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    public void deleteProductByCategory(Long categoyId){
+        List<Product> products = productRepository.findByCategory(categoyId);
+        products.forEach(product -> {
+            product.setState(false);
+            productRepository.save(product);
+        });
+    }
 
+    public void deleteProductBySubCategory(Long subCategoryId){
+        List<Product> products = productRepository.findBySubCategory(subCategoryId);
+        products.forEach(product -> {
+            product.setState(false);
+            productRepository.save(product);
+        });
+    }
     
+    public void deleteProductByVariety(Long varietyId){
+        List<Product> products = productRepository.findByVariety(varietyId);
+        products.forEach(product -> {
+            product.setState(false);
+            productRepository.save(product);
+        });
+    }
 }

@@ -16,5 +16,6 @@ public interface CategoryService {
     
     public Category createCategory(String category_name) throws CategoryDuplicateException;
 
+    public Category deleteCategory(Long categoryId) throws CategoryNoSuchElementException;
 
 }

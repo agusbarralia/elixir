@@ -4,9 +4,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elixir.elixir.entity.dto.OrderDTO;
-import com.elixir.elixir.repository.OrderRepository;
-import com.elixir.elixir.service.OrderServiceImpl;
-import com.elixir.elixir.service.UserServiceImpl;
 import com.elixir.elixir.service.Interface.CheckoutService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +18,6 @@ public class CheckoutController {
 
     @Autowired
     private CheckoutService checkoutService;
-
-    @Autowired 
-    UserServiceImpl userService;
-
-    @Autowired
-    OrderRepository orderRepository;
-
-    @Autowired
-    private OrderServiceImpl orderService;
-
     
     @PostMapping("/process")
     public ResponseEntity<OrderDTO> processCheckout() {
