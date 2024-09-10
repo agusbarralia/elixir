@@ -1,8 +1,6 @@
 package com.elixir.elixir.service.Interface;
 
 import java.time.LocalDateTime;
-import com.elixir.elixir.entity.Product;
-import com.elixir.elixir.entity.ProductImage;
 import com.elixir.elixir.entity.dto.ProductDTO;
 import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
@@ -13,10 +11,7 @@ import io.jsonwebtoken.io.IOException;
 
 import java.sql.SQLException;
 
-//import io.jsonwebtoken.io.IOException;
-
 import java.util.List;
-import java.util.Map;
 import javax.sql.rowset.serial.SerialException;
 
 

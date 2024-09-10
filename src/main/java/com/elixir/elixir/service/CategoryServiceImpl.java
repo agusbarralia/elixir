@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Optional<Category> getCategoryByName(String category_name) throws CategoryNoSuchElementException {
-        Optional<Category> category = categoryRepository.findByName(category_name);
+        Optional<Category> category = categoryRepository.findByNameAndStateTrue(category_name);
         if (category.isPresent() && category.get().getState()) {
             return category;
         } else {
@@ -33,12 +33,20 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    public Category createCategory(String category_name) throws CategoryDuplicateException{
-        Optional<Category> categories = categoryRepository.findByName(category_name);
-        if(categories.isEmpty())
+    public Category createCategory(String category_name) throws CategoryDuplicateException {
+        Optional<Category> existingCategory = categoryRepository.findByNameAndStateTrue(category_name);
+    
+        if (existingCategory.isPresent()) {
+            if (existingCategory.get().getState()) {
+                throw new CategoryDuplicateException();
+            } else {
+                // Si la categoría existe pero su estado es false, se puede crear una nueva categoría
+                return categoryRepository.save(new Category(category_name));
+            }
+        } else {
             return categoryRepository.save(new Category(category_name));
-        throw new CategoryDuplicateException();
         }
+    }
 
     public Category deleteCategory(Long categoryId) throws CategoryNoSuchElementException{
         Optional<Category> category = categoryRepository.findById(categoryId);

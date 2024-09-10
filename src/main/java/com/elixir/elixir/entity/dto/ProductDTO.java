@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
-import com.elixir.elixir.entity.dto.ProductImageDTO;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -17,16 +17,16 @@ import com.elixir.elixir.service.Interface.SubCategoryService;
 public class SubCategoryServiceImpl implements SubCategoryService{
 
     @Autowired
-    private SubCategoryRepository SubCategoryRepository;
+    private SubCategoryRepository subCategoryRepository;
     @Autowired
     private ProductService productService;
 
     public List<SubCategory> getSubCategories(){
-        return SubCategoryRepository.findAllWithStateTrue();
+        return subCategoryRepository.findAllWithStateTrue();
     }
 
     public Optional<SubCategory> getSubCategoryByName(String subcategory_name) throws SubCategoryNoSuchElementException {
-        Optional<SubCategory> subcategory = SubCategoryRepository.findBySubCategoryName(subcategory_name);
+        Optional<SubCategory> subcategory = subCategoryRepository.findByNameAndStateTrue(subcategory_name);
         if (subcategory.isPresent()) {
             return subcategory;
         } else {
@@ -34,18 +34,26 @@ public class SubCategoryServiceImpl implements SubCategoryService{
         }
     }
 
-    public SubCategory createSubCategory(String subcategory_name) throws SubCategoryDuplicateException{
-        Optional<SubCategory> subcategories = SubCategoryRepository.findBySubCategoryName(subcategory_name);
-        if(subcategories.isEmpty())
-            return SubCategoryRepository.save(new SubCategory(subcategory_name));
-        throw new SubCategoryDuplicateException();
+    public SubCategory createSubCategory(String subcategory_name) throws SubCategoryDuplicateException {
+        Optional<SubCategory> existingSubCategory = subCategoryRepository.findByNameAndStateTrue(subcategory_name);
+    
+        if (existingSubCategory.isPresent()) {
+            if (existingSubCategory.get().getState()) {
+                throw new SubCategoryDuplicateException();
+            } else {
+                // Si la subcategoría existe pero su estado es false, se puede crear una nueva subcategoría
+                return subCategoryRepository.save(new SubCategory(subcategory_name));
+            }
+        } else {
+            return subCategoryRepository.save(new SubCategory(subcategory_name));
         }
+    }
 
     public SubCategory deleteSubCategory(Long subCategoryId) throws SubCategoryNoSuchElementException{
-        Optional<SubCategory> SubCategory = SubCategoryRepository.findById(subCategoryId);
+        Optional<SubCategory> SubCategory = subCategoryRepository.findById(subCategoryId);
         if (SubCategory.isPresent()) {
             SubCategory.get().setState(false);
-            SubCategoryRepository.save(SubCategory.get());
+            subCategoryRepository.save(SubCategory.get());
             productService.deleteProductBySubCategory(subCategoryId);
             return SubCategory.get();
         } else {

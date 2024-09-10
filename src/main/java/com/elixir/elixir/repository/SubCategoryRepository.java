@@ -13,8 +13,7 @@ import com.elixir.elixir.entity.SubCategory;
 @Repository
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> {
     
-    @Query(value = "SELECT c FROM SubCategory c WHERE c.name = ?1")
-    Optional<SubCategory> findBySubCategoryName(String name);
+    Optional<SubCategory> findByNameAndStateTrue(String name);
 
     @Query(value = "SELECT c FROM SubCategory c WHERE c.state = true")
     List<SubCategory> findAllWithStateTrue();
