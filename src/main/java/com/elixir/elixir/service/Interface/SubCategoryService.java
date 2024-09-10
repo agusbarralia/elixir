@@ -3,9 +3,7 @@ package com.elixir.elixir.service.Interface;
 import java.util.List;
 import java.util.Optional;
 
-import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.entity.SubCategory;
-import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.exceptions.SubCategoryDuplicateException;
 import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
 

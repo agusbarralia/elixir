@@ -27,7 +27,7 @@ public class VarietyServiceImpl implements VarietyService{
     }
 
     public Optional<Variety> getVarietyByName(String variety_name) throws VarietyNoSuchElementException {
-        Optional<Variety> variety = VarietyRepository.findVarietyByName(variety_name);
+        Optional<Variety> variety = VarietyRepository.findByNameAndStateTrue(variety_name);
         if (variety.isPresent()) {
             return variety;
         } else {
@@ -35,12 +35,20 @@ public class VarietyServiceImpl implements VarietyService{
         }
     }
 
-    public Variety createVariety(String variety_name) throws VarietyDuplicateException{
-        Optional<Variety> varieties = VarietyRepository.findVarietyByName(variety_name);
-        if(varieties.isEmpty())
+    public Variety createVariety(String variety_name) throws VarietyDuplicateException {
+        Optional<Variety> existingVariety = VarietyRepository.findByNameAndStateTrue(variety_name);
+    
+        if (existingVariety.isPresent()) {
+            if (existingVariety.get().getState()) {
+                throw new VarietyDuplicateException();
+            } else {
+                // Si la variedad existe pero su estado es false, se puede crear una nueva variedad
+                return VarietyRepository.save(new Variety(variety_name));
+            }
+        } else {
             return VarietyRepository.save(new Variety(variety_name));
-        throw new VarietyDuplicateException();
         }
+    }
 
     public Variety deleteVariety(Long varietyId) throws VarietyNoSuchElementException {
         Optional<Variety> variety = VarietyRepository.findById(varietyId);

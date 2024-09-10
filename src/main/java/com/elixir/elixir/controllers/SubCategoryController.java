@@ -8,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elixir.elixir.entity.Category;
 import com.elixir.elixir.entity.SubCategory;
-import com.elixir.elixir.exceptions.CategoryNoSuchElementException;
 import com.elixir.elixir.exceptions.SubCategoryDuplicateException;
 import com.elixir.elixir.exceptions.SubCategoryNoSuchElementException;
 import com.elixir.elixir.service.Interface.SubCategoryService;

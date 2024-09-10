@@ -14,7 +14,7 @@ import com.elixir.elixir.entity.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long>{
 
-    Optional<Category> findByName(String name);
+    Optional<Category> findByNameAndStateTrue(String name);
 
     @Query ("SELECT c FROM Category c WHERE c.state = true")
     List<Category> findAllWithStateTrue();

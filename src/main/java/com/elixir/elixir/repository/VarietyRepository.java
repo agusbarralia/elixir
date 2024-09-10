@@ -12,8 +12,7 @@ import com.elixir.elixir.entity.Variety;
 @Repository
 public interface VarietyRepository extends JpaRepository<Variety, Long> {
     
-    @Query(value = "SELECT c FROM Variety c WHERE c.name = ?1")
-    Optional<Variety> findVarietyByName(String name);
+    Optional<Variety> findByNameAndStateTrue(String name);
 
     @Query(value = "SELECT c FROM Variety c WHERE c.state = true")
     List<Variety> findAllWithStateTrue();
