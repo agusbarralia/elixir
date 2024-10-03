@@ -91,6 +91,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDTO> getProductsByCategoryName (String categoryName) throws CategoryNoSuchElementException {
+        List<Product> products = productRepository.findByCategoryName(categoryName);
+        return products.stream()
+                .filter(Product::getState)  // Filtra productos cuyo estado sea true
+                .map(this::convertToDTO)  // Convierte cada Product a ProductDTO
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ProductDTO changeState(Long product_id) throws ProductNoSuchElementException {
         Optional<Product> product = productRepository.findById(product_id);
         if (product.isPresent()) {
@@ -310,4 +319,5 @@ public class ProductServiceImpl implements ProductService {
             productRepository.save(product);
         });
     }
+
 }

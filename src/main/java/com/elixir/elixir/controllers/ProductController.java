@@ -19,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("products")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProductController {
 
     @Autowired
@@ -51,7 +54,16 @@ public class ProductController {
         throws ProductNoSuchElementException {
             return ResponseEntity.ok(productService.getProductByName(product_name));
     }
-
+    
+    @GetMapping("/category")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@RequestParam String categoryName)
+            throws CategoryNoSuchElementException {
+        // Llamar al servicio para obtener los productos de la categoría
+        List<ProductDTO> products = productService.getProductsByCategoryName(categoryName);
+    
+        // Retornar la lista de productos como respuesta
+        return ResponseEntity.ok(products);
+    }
     @PostMapping("admin/create")
     public ResponseEntity<ProductDTO> createProduct(
             @RequestParam String name,

@@ -25,6 +25,8 @@ public interface ProductService {
 
     public ProductDTO getProductByName(String product_name) throws ProductNoSuchElementException;
 
+    public List<ProductDTO> getProductsByCategoryName(String categoryName) throws CategoryNoSuchElementException;
+
     public ProductDTO changeState(Long product_id) throws ProductNoSuchElementException;
 
     public void updateProductImages(Long productId, List<MultipartFile> imagesAdd, List<Long> ImagesRemove)throws IOException, SerialException, SQLException, java.io.IOException;

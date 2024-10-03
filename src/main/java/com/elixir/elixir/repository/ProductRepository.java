@@ -25,4 +25,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.variety.variety_id = ?1")
     List<Product> findByVariety(Long variety_id);
 
+    @Query("SELECT p FROM Product p WHERE p.category.name = ?1")
+    List<Product> findByCategoryName(String name);
+
 }
