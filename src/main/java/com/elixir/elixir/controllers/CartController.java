@@ -13,6 +13,7 @@ import com.elixir.elixir.exceptions.ProductCartNoSuchElementException;
 import com.elixir.elixir.exceptions.ProductNoSuchElementException;
 import com.elixir.elixir.service.Interface.CartService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("cart")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CartController {
 
     @Autowired
