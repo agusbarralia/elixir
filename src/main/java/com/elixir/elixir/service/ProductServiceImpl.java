@@ -271,9 +271,9 @@ public class ProductServiceImpl implements ProductService {
         productDTO.setStock(product.getStock());
         productDTO.setDatePublished(product.getDate_published());
         productDTO.setState(product.getState());
-        productDTO.setVarietyId(product.getVariety() != null ? product.getVariety().getVariety_id() : null);
-        productDTO.setSubCategoryId(product.getSubCategory() != null ? product.getSubCategory().getSubCategory_id() : null);
-        productDTO.setCategoryId(product.getCategory() != null ? product.getCategory().getCategory_id() : null);
+        productDTO.setVarietyName(product.getVariety() != null ? product.getVariety().getName() : null);
+        productDTO.setSubCategoryName(product.getSubCategory() != null ? product.getSubCategory().getName() : null);
+        productDTO.setCategoryName(product.getCategory() != null ? product.getCategory().getName() : null);
         productDTO.setImagesList(imageDTOs);
         productDTO.setDiscount(product.getDiscount());
         return productDTO;

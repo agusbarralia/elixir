@@ -56,7 +56,7 @@ public class ProductController {
     }
     
     @GetMapping("/category")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@RequestParam String categoryName)
+    public ResponseEntity<List<ProductDTO>> getProductsByCategoryName(@RequestParam String categoryName)
             throws CategoryNoSuchElementException {
         // Llamar al servicio para obtener los productos de la categoría
         List<ProductDTO> products = productService.getProductsByCategoryName(categoryName);

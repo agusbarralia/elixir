@@ -18,9 +18,9 @@ public class ProductDTO {
     private int stock;
     private LocalDateTime datePublished;
     private boolean state;
-    private Long varietyId;
-    private Long subCategoryId;
-    private Long categoryId;
+    private String varietyName;
+    private String subCategoryName;
+    private String categoryName;
     private float discount;
     private List<ProductImageDTO> imagesList;
 
