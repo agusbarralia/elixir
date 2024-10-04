@@ -16,6 +16,7 @@ import com.elixir.elixir.controllers.auth.AuthenticationRequest;
 //import com.elixir.elixir.controllers.auth.AuthenticationController;
 import com.elixir.elixir.controllers.auth.RegisterRequest;
 import com.elixir.elixir.controllers.config.JwtService;
+import com.elixir.elixir.entity.Role;
 import com.elixir.elixir.entity.User;
 import com.elixir.elixir.exceptions.CartDuplicateException;
 
@@ -42,7 +43,7 @@ public class AuthenticationService {
                             .username(request.getEmail())
                             .state(true)
                             .creation_date(LocalDateTime.now())
-                            .role(request.getRole())
+                            .role(Role.USER)
                             .build();
 
             repository.save(user);
@@ -52,6 +53,7 @@ public class AuthenticationService {
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                             .accessToken(jwtToken)
+                            .role(user.getRole())
                             .build();
     }
 

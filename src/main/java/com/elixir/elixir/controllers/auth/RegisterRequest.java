@@ -16,5 +16,4 @@ public class RegisterRequest { //VER DATA
     private String lastname;
     private String email;
     private String password;
-    private Role role;
 }
