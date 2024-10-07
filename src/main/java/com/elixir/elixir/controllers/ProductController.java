@@ -64,22 +64,25 @@ public class ProductController {
         // Retornar la lista de productos como respuesta
         return ResponseEntity.ok(products);
     }
+
     @PostMapping("admin/create")
     public ResponseEntity<ProductDTO> createProduct(
             @RequestParam String name,
             @RequestParam String product_description,
             @RequestParam Double price,
             @RequestParam int stock,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date_published,
-            @RequestParam boolean state,
             @RequestParam Long varietyId,
             @RequestParam Long subCategoryId,
             @RequestParam Long categoryId,
             @RequestParam(value = "images", required = false) List<MultipartFile> images) 
             throws ProductNoSuchElementException, java.io.IOException, SQLException, VarietyNoSuchElementException, CategoryNoSuchElementException, SubCategoryNoSuchElementException {
 
+        // Asignar valores por defecto
+        boolean state = true; // Siempre verdadero
+        LocalDateTime datePublished = LocalDateTime.now(); // Fecha y hora actual
+
         // Llamar al servicio para crear el producto
-        ProductDTO result = productService.createProduct(name, product_description, price,stock, date_published, state, varietyId, subCategoryId, categoryId, images);
+        ProductDTO result = productService.createProduct(name, product_description, price, stock, datePublished, state, varietyId, subCategoryId, categoryId, images);
         
         // Devolver la respuesta
         return ResponseEntity.ok(productService.getProductById(result.getProductId()));
