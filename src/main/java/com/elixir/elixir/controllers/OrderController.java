@@ -10,12 +10,15 @@ import com.elixir.elixir.entity.dto.OrderDTO;
 import com.elixir.elixir.exceptions.OrderNoSuchElementException;
 import com.elixir.elixir.service.Interface.OrderService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
 @RequestMapping("orders")
+@CrossOrigin(origins = "http://localhost:5173")
+
 public class OrderController {
 
     @Autowired
