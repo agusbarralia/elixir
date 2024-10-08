@@ -49,17 +49,12 @@ public class SubCategoryServiceImpl implements SubCategoryService{
         }
     }
 
-    public SubCategory deleteSubCategory(Long subCategoryId) throws SubCategoryNoSuchElementException{
-        Optional<SubCategory> SubCategory = subCategoryRepository.findById(subCategoryId);
-        if (SubCategory.isPresent()) {
-            SubCategory.get().setState(false);
-            subCategoryRepository.save(SubCategory.get());
-            productService.deleteProductBySubCategory(subCategoryId);
-            return SubCategory.get();
-        } else {
-            throw new SubCategoryNoSuchElementException();
-        }
+    public SubCategory deleteSubCategory(String subCategory_name) throws SubCategoryNoSuchElementException{
+        SubCategory subCategory = subCategoryRepository.findByNameAndStateTrue(subCategory_name)
+                                .orElseThrow(() -> new IllegalStateException("Subcategoria no encontrada"));
+            subCategory.setState(false);
+            subCategoryRepository.save(subCategory);
+            productService.deleteProductBySubCategory(subCategory.getSubCategory_id());
+            return subCategory;
     }
-
-
 }

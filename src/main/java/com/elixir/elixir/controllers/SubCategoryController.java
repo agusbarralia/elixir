@@ -46,10 +46,10 @@ public class SubCategoryController {
             return ResponseEntity.created(URI.create("/subcategories/" + result.getSubCategory_id())).body(result);
         }
 
-    @DeleteMapping("/admin/{subCategory_id}")
-    public ResponseEntity<SubCategory> deleteSubCategory(@PathVariable Long subCategory_id)
+    @DeleteMapping("/admin/{subCategory_name}")
+    public ResponseEntity<SubCategory> deleteSubCategory(@PathVariable String subCategory_name)
         throws SubCategoryNoSuchElementException{
-            SubCategory result = subcategoryService.deleteSubCategory(subCategory_id);
+            SubCategory result = subcategoryService.deleteSubCategory(subCategory_name);
             return ResponseEntity.ok(result);
         }
 

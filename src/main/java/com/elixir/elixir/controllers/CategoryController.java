@@ -44,10 +44,10 @@ public class CategoryController {
             return ResponseEntity.created(URI.create("/categories/" + result.getCategory_id())).body(result);
         }
 
-    @DeleteMapping("/admin/{categoryId}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable Long categoryId)
+    @DeleteMapping("/admin/{category_name}")
+    public ResponseEntity<Category> deleteCategory(@PathVariable String category_name)
         throws CategoryNoSuchElementException{
-            Category result = categoryService.deleteCategory(categoryId);
+            Category result = categoryService.deleteCategory(category_name);
             return ResponseEntity.ok(result);
         }
 }

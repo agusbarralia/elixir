@@ -48,15 +48,14 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    public Category deleteCategory(Long categoryId) throws CategoryNoSuchElementException{
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        if (category.isPresent()) {
-            category.get().setState(false);
-            categoryRepository.save(category.get());
-            productService.deleteProductByCategory(categoryId);
-            return category.get();
-        } else {
-            throw new CategoryNoSuchElementException();
-        }
+    public Category deleteCategory(String category_name) throws CategoryNoSuchElementException{
+        Category category = categoryRepository.findByNameAndStateTrue(category_name)
+                        .orElseThrow(() -> new IllegalStateException("Categoria no encontrada"));
+
+        category.setState(false);
+        categoryRepository.save(category);
+        productService.deleteProductByCategory(category.getCategory_id());
+        return category;
+        
     }
 }

@@ -16,7 +16,13 @@ public interface CategoryRepository extends JpaRepository<Category, Long>{
 
     Optional<Category> findByNameAndStateTrue(String name);
 
+    Optional<Category> findByName(String name);
+
+
+
     @Query ("SELECT c FROM Category c WHERE c.state = true")
     List<Category> findAllWithStateTrue();
+
+
 
 }

@@ -50,16 +50,14 @@ public class VarietyServiceImpl implements VarietyService{
         }
     }
 
-    public Variety deleteVariety(Long varietyId) throws VarietyNoSuchElementException {
-        Optional<Variety> variety = VarietyRepository.findById(varietyId);
-        if (variety.isPresent()) {
-            variety.get().setState(false);
-            VarietyRepository.save(variety.get());
-            productService.deleteProductByVariety(varietyId); // Asegúrate de tener este método en ProductService
-            return variety.get();
-        } else {
-            throw new VarietyNoSuchElementException();
-        }
+    public Variety deleteVariety(String variety_name) throws VarietyNoSuchElementException {
+        Variety variety = VarietyRepository.findByNameAndStateTrue(variety_name)
+                                        .orElseThrow(() -> new IllegalStateException("Subcategoria no encontrada"));
+        variety.setState(false);
+        VarietyRepository.save(variety);
+        productService.deleteProductByVariety(variety.getVariety_id()); // Asegúrate de tener este método en ProductService
+        return variety;
+
     }
 }
 

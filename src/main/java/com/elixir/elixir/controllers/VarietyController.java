@@ -46,10 +46,10 @@ public class VarietyController {
             return ResponseEntity.created(URI.create("/varieties/" + result.getVariety_id())).body(result);
         }
 
-    @DeleteMapping("/admin/{varietyId}")
-    public ResponseEntity<Variety> deleteVariety(@PathVariable Long varietyId)
+    @DeleteMapping("/admin/{variety_name}")
+    public ResponseEntity<Variety> deleteVariety(@PathVariable String variety_name)
         throws VarietyNoSuchElementException{
-            Variety result = varietyService.deleteVariety(varietyId);
+            Variety result = varietyService.deleteVariety(variety_name);
             return ResponseEntity.ok(result);
         }
     }

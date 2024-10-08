@@ -16,6 +16,6 @@ public interface SubCategoryService {
 
     public SubCategory createSubCategory(String subcategory_name) throws SubCategoryDuplicateException;
 
-    public SubCategory deleteSubCategory(Long subCategoryId) throws SubCategoryNoSuchElementException;
+    public SubCategory deleteSubCategory(String subCategory_name) throws SubCategoryNoSuchElementException;
 
 }
