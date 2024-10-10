@@ -124,7 +124,7 @@ public class ProductController {
     }
     
     @PutMapping("admin/update/discount")
-    public ResponseEntity<String> updateDiscount(@RequestParam("product_id") Long productId, @RequestParam("discount") float discount) {
+    public ResponseEntity<String> updateDiscount(@RequestParam("product_id") Long productId, @RequestParam("discount") float discount) { 
         try {
             if(discount >= 0 && discount <= 0.8){ //Nosotros lo seteamos asi
                 productService.updateProductDiscount(productId, discount);
