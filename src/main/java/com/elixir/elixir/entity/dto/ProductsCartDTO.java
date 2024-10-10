@@ -12,6 +12,7 @@ public class ProductsCartDTO {
     private Long productscart_id;
     private int quantity;
     private Double unit_price;
+    private Double discount_price;
     private Double subtotal;
     private Long cart_id;
     private Long product_id;

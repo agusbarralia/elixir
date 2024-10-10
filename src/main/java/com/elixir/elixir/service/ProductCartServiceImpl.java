@@ -42,7 +42,8 @@ public class ProductCartServiceImpl implements ProductCartService {
         productsCart.setProduct(product);
         productsCart.setCart(cart);
         productsCart.setQuantity(newQuantity);
-        productsCart.setUnit_price(product.getPrice() * (1 - product.getDiscount()));
+        productsCart.setUnit_price(product.getPrice());
+        productsCart.setDiscount_price(product.getPrice() * (1 - product.getDiscount()));
         productsCart.setSubtotal(product.getPrice() * newQuantity * (1 - product.getDiscount()));
         productsCart.setDiscount(product.getDiscount());
     
@@ -62,17 +63,25 @@ public class ProductCartServiceImpl implements ProductCartService {
     }
 
     public void updateProductCart(ProductsCart productsCart, Product product){
-        productsCart.setUnit_price(product.getPrice() * (1 - product.getDiscount()));
+        if (productsCart == null || product == null) {
+        throw new IllegalArgumentException("ProductsCart and Product must not be null");
+    }
+        productsCart.setUnit_price(product.getPrice());
+        productsCart.setDiscount_price(product.getPrice() * (1 - product.getDiscount()));
         productsCart.setSubtotal(product.getPrice() * productsCart.getQuantity() * (1 - product.getDiscount()));
         productsCart.setDiscount(product.getDiscount());
         productCartRepository.save(productsCart);
     }
 
     public ProductsCartDTO convertToDTO(ProductsCart productsCart) {
+        if (productsCart == null || productsCart.getCart() == null || productsCart.getProduct() == null) {
+        throw new IllegalArgumentException("ProductsCart, Cart, and Product must not be null");
+    }
         return new ProductsCartDTO(
             productsCart.getProductscart_id(),
             productsCart.getQuantity(),
             productsCart.getUnit_price(),
+            productsCart.getDiscount_price(),
             productsCart.getSubtotal(),
             productsCart.getCart().getCart_id(),
             productsCart.getProduct().getProduct_id()

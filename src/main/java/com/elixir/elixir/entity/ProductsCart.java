@@ -28,6 +28,9 @@ public class ProductsCart {
     private Double unit_price;
 
     @Column
+    private Double discount_price;
+
+    @Column
     private Double subtotal;
 
     @Column
