@@ -46,9 +46,6 @@ public class CheckoutServiceImpl implements CheckoutService {
     public OrderDTO checkout() throws IllegalStateException {
 
         Long userId = userService.getCurrentUserId();
-
-        //VALIDAR QUE EL CARRITO NO ESTÉ VACÍO
-        //PREGUNTAR SI HAY STOCK
         Cart cart = cartRepository.findByUserId(userId)
                     .orElseThrow(() -> new IllegalStateException("Carrito no encontrado para el usuario"));
 
@@ -56,8 +53,6 @@ public class CheckoutServiceImpl implements CheckoutService {
             throw new IllegalStateException("El carrito está vacío");
         }
         
-
-        //Esto se puede hacer desde una funcion/metodo aparte que se llame desde aca
         cart.getProducts().forEach(productsCart -> {
             int availableStock = productsCart.getProduct().getStock();
             int requestedQuantity = productsCart.getQuantity();
@@ -70,13 +65,13 @@ public class CheckoutServiceImpl implements CheckoutService {
         Order order = new Order();
         order.setUser(userService.getUserById(userId));
         
-        order.setOrderState(orderStateRepository.findByName("Pending").get()); // Asigna el estado "Pendiente" u otro estado inicial
+        order.setOrderState(orderStateRepository.findByName("Pendiente").get()); // Asigna el estado "Pendiente" u otro estado inicial
         order.setOrder_date(LocalDateTime.now());
 
         List<ProductsOrder> productsOrderList = cart.getProducts().stream().map(productsCart -> {
             ProductsOrder productsOrder = new ProductsOrder();
             productsOrder.setOrder(order);
-            productsOrder.setUnit_price(productsCart.getUnit_price());
+            productsOrder.setUnit_price(productsCart.getDiscount_price());
             productsOrder.setProduct(productsCart.getProduct());
             productsOrder.setQuantity(productsCart.getQuantity());
             productsOrder.setSubtotal(productsCart.getSubtotal());
