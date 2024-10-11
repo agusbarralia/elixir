@@ -41,6 +41,7 @@ public class SecurityConfig {
                                             .requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
                                             .requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
                                             .requestMatchers("/orders/**").hasAnyAuthority(Role.USER.name())
+                                            .requestMatchers("/users/user").hasAnyAuthority(Role.USER.name())
             
                                             // Rutas públicas
                                             .requestMatchers("/api/v1/auth/**").permitAll()
