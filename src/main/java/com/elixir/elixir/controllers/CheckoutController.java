@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RestController
 @RequestMapping("checkout")
 @CrossOrigin(origins = "http://localhost:5173")
-
 public class CheckoutController {
 
     @Autowired

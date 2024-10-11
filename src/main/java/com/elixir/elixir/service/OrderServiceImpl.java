@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 
 import com.elixir.elixir.entity.Order;
+import com.elixir.elixir.entity.Role;
+import com.elixir.elixir.entity.User;
 import com.elixir.elixir.entity.dto.OrderDTO;
 import com.elixir.elixir.entity.dto.ProductsOrderDTO;
 import com.elixir.elixir.exceptions.OrderNoSuchElementException;
@@ -46,12 +48,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO getOrderById(Long order_id) throws OrderNoSuchElementException {
-        Long userId = userService.getCurrentUserId();
+    Long userId = userService.getCurrentUserId();
+    User user = userService.getUserById(userId);
+    
     Optional<Order> order = orderRepository.findById(order_id);
 
     if (order.isPresent()) {
         Order foundOrder = order.get();
-        if (!foundOrder.getUser().getUser_id().equals(userId)) {
+        if (!foundOrder.getUser().getUser_id().equals(userId) && !user.getRole().equals(Role.ADMIN)) {
             throw new OrderNoSuchElementException();
         }
         return convertToOrderDTO(foundOrder);
