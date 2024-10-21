@@ -1,7 +1,5 @@
 package com.elixir.elixir.controllers.auth;
 
-import com.elixir.elixir.entity.Role;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

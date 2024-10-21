@@ -16,9 +16,7 @@ public interface UserService {
 
     public UserDTO userInfoUpdate(String username, String email, String name, String last_name);
 
-    public UserDTO deactivateUser(Long userId);
-
-    public UserDTO activateUser(Long userId);
+    public UserDTO changeState(Long userId);
 
     public List<UserAdminDTO> getAllUsers();
 }

@@ -2,6 +2,7 @@ package com.elixir.elixir.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,32 +29,26 @@ public class UserController {
 
 
     @GetMapping("/user")
-    public UserDTO getUser() {
+    public ResponseEntity<UserDTO> getUser() {
         Long userId = userService.getCurrentUserId();
         User user = userService.getUserById(userId);
-        return userService.convertToDTO(user);
+        return ResponseEntity.ok(userService.convertToDTO(user));
     }
 
     @PutMapping("/user")
-    public UserDTO updateUserData(@RequestParam String username, @RequestParam String email, @RequestParam String name, @RequestParam String last_name) {
-        return userService.userInfoUpdate(username, email, name, last_name);
+    public ResponseEntity<UserDTO> updateUserData(@RequestParam String username, @RequestParam String email, @RequestParam String name, @RequestParam String last_name) {
+        return ResponseEntity.ok(userService.userInfoUpdate(username, email, name, last_name));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/admin/deactivate")
-    public UserDTO deactivateUser(@RequestParam Long userId) {
-        return userService.deactivateUser(userId);
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/admin/activate")
-    public UserDTO activateUser(@RequestParam Long userId) {
-        return userService.activateUser(userId);
+    @PutMapping("/admin/changeState")
+    public ResponseEntity<UserDTO> changeState(@RequestParam Long userId) {
+        return ResponseEntity.ok(userService.changeState(userId));
     }
 
     @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserAdminDTO> getAllUsers() {
-    return userService.getAllUsers();
+    public ResponseEntity<List<UserAdminDTO>> getAllUsers() {
+    return ResponseEntity.ok(userService.getAllUsers());
     }
 }

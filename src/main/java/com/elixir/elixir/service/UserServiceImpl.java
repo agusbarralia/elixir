@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setName(user.getName());
         userDTO.setLast_name(user.getLast_name());
         userDTO.setState(user.getState());
+        userDTO.setId(user.getUser_id());
 
         return userDTO;
     }
@@ -78,21 +79,14 @@ public class UserServiceImpl implements UserService {
         return convertToDTO(user);
     }
 
-    public UserDTO deactivateUser(Long userId) {
+    public UserDTO changeState(Long userId) {
     User user = getUserById(userId);
     if (user.getRole() == Role.ADMIN) {
         throw new AccessDeniedException("Cannot deactivate an ADMIN user.");
     }
-    user.setState(false);
+    user.setState(!user.getState());
     userRepository.save(user);
     return convertToDTO(user);
-    }
-
-    public UserDTO activateUser(Long userId) {
-        User user = getUserById(userId);
-        user.setState(true);
-        userRepository.save(user);
-        return convertToDTO(user);
     }
 
     public List<UserAdminDTO> getAllUsers() {

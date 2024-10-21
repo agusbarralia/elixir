@@ -14,5 +14,6 @@ public class UserAdminDTO {
     private String name;
     private String last_name;
     private Boolean state;
+    private Long id;
     
 }
