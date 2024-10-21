@@ -36,11 +36,14 @@ public class SecurityConfig {
                                             .requestMatchers("/varieties/admin/**").hasAnyAuthority(Role.ADMIN.name())
                                             .requestMatchers("/products/admin/**").hasAnyAuthority(Role.ADMIN.name())
                                             .requestMatchers("/orders/admin/**").hasAnyAuthority(Role.ADMIN.name())
+                                            .requestMatchers("/users/admin/**").hasAnyAuthority(Role.ADMIN.name())
             
                                             // Rutas específicas para usuarios
                                             .requestMatchers("/cart/**").hasAnyAuthority(Role.USER.name())
                                             .requestMatchers("/checkout/**").hasAnyAuthority(Role.USER.name())
-                                            //.requestMatchers("/orders/**").hasAnyAuthority(Role.USER.name())
+                                            .requestMatchers("/orders/**").hasAnyAuthority(Role.USER.name())
+                                            .requestMatchers("/users/user").hasAnyAuthority(Role.USER.name())
+
             
                                             // Rutas públicas
                                             .requestMatchers("/api/v1/auth/**").permitAll()
