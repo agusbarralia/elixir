@@ -2,6 +2,8 @@ package com.elixir.elixir.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,8 @@ import com.elixir.elixir.service.Interface.OrderService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -37,6 +41,13 @@ public class OrderController {
     @GetMapping("/order/{order_id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long order_id) throws OrderNoSuchElementException {
         return ResponseEntity.ok(orderService.getOrderById(order_id));
+    }
+
+    @PutMapping("/order/{orderId}/state")
+    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long orderId) {
+        // Lógica para actualizar el estado de la orden
+        return ResponseEntity.ok(orderService.updateState(orderId));
+        
     }
 
 }

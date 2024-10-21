@@ -16,4 +16,6 @@ public interface OrderService {
 
     public OrderDTO convertToOrderDTO(Order order);
 
+    public OrderDTO updateState(Long order_id);
+
 }

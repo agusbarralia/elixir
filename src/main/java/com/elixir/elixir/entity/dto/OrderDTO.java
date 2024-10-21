@@ -15,6 +15,7 @@ public class OrderDTO {
     private Long orderId;
     private LocalDateTime order_date;
     private Long userId;
+    private String state;
     private List<ProductsOrderDTO> productsOrders;
     private double total;
 

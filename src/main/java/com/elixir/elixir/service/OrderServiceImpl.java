@@ -8,10 +8,14 @@ import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 
 import com.elixir.elixir.entity.Order;
+import com.elixir.elixir.entity.OrderState;
+import com.elixir.elixir.entity.Role;
+import com.elixir.elixir.entity.User;
 import com.elixir.elixir.entity.dto.OrderDTO;
 import com.elixir.elixir.entity.dto.ProductsOrderDTO;
 import com.elixir.elixir.exceptions.OrderNoSuchElementException;
 import com.elixir.elixir.repository.OrderRepository;
+import com.elixir.elixir.repository.OrderStateRepository;
 import com.elixir.elixir.service.Interface.OrderService;
 import com.elixir.elixir.service.Interface.UserService;
 
@@ -20,6 +24,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderStateRepository orderStateRepository;
 
     @Autowired
     private ProductServiceImpl productService;
@@ -46,12 +53,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO getOrderById(Long order_id) throws OrderNoSuchElementException {
-        Long userId = userService.getCurrentUserId();
+    Long userId = userService.getCurrentUserId();
+    User user = userService.getUserById(userId);
+    
     Optional<Order> order = orderRepository.findById(order_id);
 
     if (order.isPresent()) {
         Order foundOrder = order.get();
-        if (!foundOrder.getUser().getUser_id().equals(userId)) {
+        if (!foundOrder.getUser().getUser_id().equals(userId) && !user.getRole().equals(Role.ADMIN)) {
             throw new OrderNoSuchElementException();
         }
         return convertToOrderDTO(foundOrder);
@@ -66,6 +75,7 @@ public class OrderServiceImpl implements OrderService {
         orderDTO.setOrderId(order.getOrder_id());
         orderDTO.setOrder_date(order.getOrder_date());
         orderDTO.setUserId(order.getUser().getUser_id());
+        orderDTO.setState(order.getOrderState().getName());
         orderDTO.setProductsOrders(order.getProductOrders().stream()
                 .map(productsOrder -> {
                     ProductsOrderDTO productsOrderDTO = new ProductsOrderDTO();
@@ -80,5 +90,16 @@ public class OrderServiceImpl implements OrderService {
         orderDTO.setTotal(order.getTotal());
         return orderDTO;
     }
+
+    public OrderDTO updateState(Long order_id){
+        Order order = orderRepository.findById(order_id)
+                .orElseThrow(() -> new IllegalStateException("Orden no encontrada"));
+        OrderState orderState = orderStateRepository.findByName("Finalizada").get();
+        order.setOrderState(orderState);
+        orderRepository.save(order);
+
+        return convertToOrderDTO(order);
+    }
+
 
 }
