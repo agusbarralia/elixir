@@ -95,7 +95,7 @@ public class CartServiceImpl implements CartService {
         }
 
         productCart.setQuantity(quantity);
-        productCart.setSubtotal(productCart.getUnit_price() * quantity);
+        productCart.setSubtotal(productCart.getUnit_price() * quantity * (1 - productCart.getDiscount()));
         productCartRepository.save(productCart);
 
         return productCartService.convertToDTO(productCart);

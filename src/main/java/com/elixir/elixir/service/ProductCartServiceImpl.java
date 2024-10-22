@@ -64,7 +64,7 @@ public class ProductCartServiceImpl implements ProductCartService {
 
     public void updateProductCart(ProductsCart productsCart, Product product){
         if (productsCart == null || product == null) {
-        throw new IllegalArgumentException("ProductsCart and Product must not be null");
+        throw new IllegalArgumentException("ProductsCart y Product no deben ser nulos");
     }
         productsCart.setUnit_price(product.getPrice());
         productsCart.setDiscount_price(product.getPrice() * (1 - product.getDiscount()));
@@ -75,7 +75,7 @@ public class ProductCartServiceImpl implements ProductCartService {
 
     public ProductsCartDTO convertToDTO(ProductsCart productsCart) {
         if (productsCart == null || productsCart.getCart() == null || productsCart.getProduct() == null) {
-        throw new IllegalArgumentException("ProductsCart, Cart, and Product must not be null");
+        throw new IllegalArgumentException("ProductsCart, Cart y Product no deben ser nulos");
     }
         return new ProductsCartDTO(
             productsCart.getProductscart_id(),
