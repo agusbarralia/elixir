@@ -42,7 +42,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/admin/changeState")
-    public ResponseEntity<UserDTO> changeState(@RequestParam Long userId) {
+    public ResponseEntity<UserAdminDTO> changeState(@RequestParam Long userId) {
         return ResponseEntity.ok(userService.changeState(userId));
     }
 

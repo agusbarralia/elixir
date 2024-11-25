@@ -79,14 +79,14 @@ public class UserServiceImpl implements UserService {
         return convertToDTO(user);
     }
 
-    public UserDTO changeState(Long userId) {
+    public UserAdminDTO changeState(Long userId) {
     User user = getUserById(userId);
     if (user.getRole() == Role.ADMIN) {
         throw new AccessDeniedException("Cannot deactivate an ADMIN user.");
     }
     user.setState(!user.getState());
     userRepository.save(user);
-    return convertToDTO(user);
+    return convertToDTOtoAdmin(user);
     }
 
     public List<UserAdminDTO> getAllUsers() {
